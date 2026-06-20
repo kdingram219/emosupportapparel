@@ -1,0 +1,591 @@
+// Product catalog for Emotional Support Apparel by K&D
+// Contains structured data for collections, categories, and products with premium pricing and witty tags.
+
+const products = [
+    // --- TOP-TIER HOODIES & TEES (Section 3 of Copy) ---
+    {
+        id: "emotional-support-hoodie",
+        name: "Emotional Support Hoodie",
+        price: 78.00,
+        category: "hoodies",
+        collections: ["introvert", "best-sellers"],
+        wittyTag: "Because sometimes the only thing holding it together is 400gsm of organic cotton.",
+        description: "The original. Crafted from ultra-heavyweight 400gsm organic fleece, this hoodie feels like a long-overdue hug from someone who actually listens. Cut for a premium, oversized fit that drapes perfectly and hides everything but your taste. It's not just a hoodie; it's a lifestyle choice.",
+        badge: "The Gold Standard",
+        features: ["400gsm organic cotton fleece", "Embroidered ESA service-tag detailing", "Generous double-layered hood", "Pre-shrunk premium weave"],
+        customizable: true
+    },
+    {
+        id: "currently-buffering-hoodie",
+        name: "Currently Buffering Hoodie",
+        price: 78.00,
+        category: "hoodies",
+        collections: ["burnout", "best-sellers"],
+        wittyTag: "Loading... please wait (or don't, I'm probably staying home anyway).",
+        description: "For the days when your brain is at 10% and your patience is at 0%. A luxury layer for those moments of deep processing. Seductively soft, intensely relatable, and built to withstand a full day of 'I literally cannot even.' Processing... in Luxury.",
+        badge: "Processing...",
+        features: ["Ultra-soft heavyweight fleece", "High-density puff print buffer emblem", "Dropped shoulders for relaxed drape", "Generous front pouch pocket"],
+        customizable: true
+    },
+    {
+        id: "running-on-empty-hoodie",
+        name: "Running On Empty Hoodie",
+        price: 78.00,
+        category: "hoodies",
+        collections: ["burnout"],
+        wittyTag: "Look this good while feeling this tired.",
+        description: "Low on fuel, high on aesthetics. This hoodie is for the high-achiever who's currently in 'low power mode.' Featuring our signature premium fleece and a fit that says 'I'm exhausted, but make it fashion.' High Style. Low Fuel.",
+        badge: "Low Fuel",
+        features: ["Premium heavyweight knit", "Blind-stitched cuffs", "Double-lined protective hood", "Faded vintage black wash"],
+        customizable: true
+    },
+    {
+        id: "let-me-think-about-it-hoodie",
+        name: "Let Me Think About It... Hoodie",
+        price: 78.00,
+        category: "hoodies",
+        collections: ["overthinker"],
+        wittyTag: "Will keep you warm while you decide if you're actually going.",
+        description: "Comes in Sage Green. High neck cross-over hoodie. Thick cuffs and thick ribbing to keep you sheltered from your own thoughts. Perfect for staring at the ceiling and analyzing every choice since 2012.",
+        badge: "Overthinker Essential",
+        features: ["Heavy crossover hoodie neck", "Sage green organic cotton blend", "Extra-deep protective side pockets", "Padded rib-knit thumbholes"],
+        customizable: true
+    },
+    {
+        id: "mentally-at-home-crewneck",
+        name: "Mentally At Home Crewneck",
+        price: 68.00,
+        category: "hoodies",
+        collections: ["introvert"],
+        wittyTag: "Physically present, emotionally in bed.",
+        description: "Home is where the soft clothes are. A luxury crewneck sweater with an ultra-soft brushed fleece interior, designed for hard exits and early departures. Premium fabric that feels as good as a 'texting is fine' boundary.",
+        badge: "Nap Approved",
+        features: ["Brushed fleece interior cotton blend", "Relaxed mock-neck collar finish", "Sophisticated balloon-sleeve drape", "Contrast double-needle stitching"],
+        customizable: true
+    },
+    {
+        id: "social-battery-2-percent-tee",
+        name: "Social Battery: 2% Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["burnout", "introvert"],
+        wittyTag: "Going home now. Don't take it personally.",
+        description: "Clear in its intent, buttery in its touch. This premium cotton tee is the perfect fit for leaving the party before the cake is even cut. A warning label for the socially exhausted, printed on the softest fabric you've ever touched. A Warning in Luxury Jersey.",
+        badge: "Critical Battery",
+        features: ["100% long-staple organic cotton", "Intricate micro-embroidery detail", "Relaxed modern boxy drape", "Ribbed neckline preserves structure"],
+        customizable: true
+    },
+    {
+        id: "replaying-conversations-since-2012-tee",
+        name: "Replaying Conversations Since 2012 Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["overthinker", "best-sellers"],
+        wittyTag: "Wait, did I say 'you too' to the waiter? Yes. Yes I did.",
+        description: "For the Professional Overthinker. A crisp, premium tee that fits perfectly while you analyze exactly what you meant by 'have a good one' at the grocery store. High-end jersey that holds its shape, even when you aren't sure you're holding yours.",
+        badge: "Overthinker Classic",
+        features: ["260gsm heavy-knit jersey cotton", "Clean minimal retro serif print", "Flat-lock non-irritating seams", "Double-needle sleeve and bottom hems"],
+        customizable: true
+    },
+    {
+        id: "i-already-regret-sending-that-tee",
+        name: "I Already Regret Sending That Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["overthinker"],
+        wittyTag: "Currently drafting an apology I won't send.",
+        description: "Digital Regret. Luxury Drape. The morning-after tee for your digital decisions. Crafted from fine-gauge cotton for those moments when you wish there was an 'un-send' button for your life. High-end fabric for low-end regrets.",
+        badge: "Post-Send Panic",
+        features: ["Fine-gauge combed ring-spun cotton", "Delicate elegant typography", "Modern slim-editorial silhouette", "Reinforced shoulders hold shape"],
+        customizable: true
+    },
+    {
+        id: "one-minor-inconvenience-away-from-becoming-a-cryptid-tee",
+        name: "One Minor Inconvenience Away From Becoming A Cryptid Tee",
+        price: 38.00,
+        category: "tees",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "Will trade social skills for silence and a nice hollow log.",
+        description: "Embrace Your Inner Myth. A premium tee for those days when the local woods look a lot more appealing than the local grocery store. Soft, breathable, and perfectly suited for a life of mystery and moss.",
+        badge: "Viral Sensation",
+        features: ["Garment-dyed vintage wash cotton", "Incredibly soft pre-shrunk finish", "Premium hand-drawn style screenprint", "Overlock structural stitching"],
+        customizable: true
+    },
+    {
+        id: "per-my-last-email-tee",
+        name: "Per My Last Email Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["corporate"],
+        wittyTag: "An elegant way of saying 'Can you read?'.",
+        description: "Luxury cotton knit tee with sharp serif font on the left chest. Perfect to wear under a blazer to assert quiet dominance in Zoom meetings. Speaks the passive-aggressive truth your HR department won't.",
+        badge: "Office Dominance",
+        features: ["100% long-staple Pima cotton", "High-density crisp serif print", "Clean blind-seam finish", "Corporate-ready minimal styling"],
+        customizable: true
+    },
+    {
+        id: "synergy-is-not-a-personality-tee",
+        name: "Synergy Is Not A Personality Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["corporate"],
+        wittyTag: "Neither is 'touching base'. Let's align on that.",
+        description: "A witty, minimalist tee mocking corporate buzzwords. Surviving the 9-to-5 with your sanity (mostly) intact. Boxy design, dropped shoulders, luxury weight.",
+        badge: "Buzzword Free",
+        features: ["100% Ring-spun combed cotton", "Heavyweight 240gsm weave", "Satin embroidered chest tag", "Universally flattering cut"],
+        customizable: true
+    },
+    {
+        id: "doing-my-best-tee",
+        name: "Doing My Best Tee",
+        price: 36.00,
+        category: "tees",
+        collections: ["burnout", "overthinker"],
+        wittyTag: "Everything is fine™... mostly.",
+        description: "A gorgeous, minimal typographic tee asserting that you are, in fact, doing your best. Made of premium heavyweight combed cotton. Soft place to land in a busy world.",
+        badge: "Self-Validating",
+        features: ["100% fine knit cotton", "Minimal serif alignment", "Breathable and ultra-soft", "Comfort ribbon collar backing"],
+        customizable: true
+    },
+
+    // --- BUNDLES ---
+    {
+        id: "millennial-survival-kit",
+        name: "The Millennial Survival Kit",
+        price: 85.00,
+        category: "tees",
+        collections: ["best-sellers", "burnout", "introvert"],
+        wittyTag: "Lower Back Pain Club Tee, We Were Told There'd Be A House Hat, Surviving On Vibes Mug.",
+        description: "The ultimate survival bundle for a generation that was promised a house and got vibes instead. Features our Lower Back Pain Club Tee ('Official member. It happened overnight.'), the 'We Were Told There'd Be A House' Dad Hat ('Still waiting. Send help and a down payment.'), and our heavy 'Surviving On Vibes' Mug ('The vibes are immaculate. The bank account is not.'). Premium comforting materials for premium-grade exhaustion.",
+        badge: "Valued Bundle",
+        features: [
+            "Lower Back Pain Club Tee (Pima Cotton)",
+            "We Were Told There'd Be A House Hat (Washed Twill)",
+            "Surviving On Vibes Mug (15oz heavy ceramic)"
+        ],
+        customizable: false
+    },
+
+    // --- TOP-TIER BEST SELLERS (Section 4 of Copy) ---
+    {
+        id: "emotional-baggage-tote",
+        name: "Emotional Baggage Tote",
+        price: 26.00,
+        category: "bags",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "Emotional Baggage Tote (Literally). Carrying way more than it should.",
+        description: "Finally, a bag that can handle everything you're bringing to the table. Our heavy-duty canvas tote features reinforced stitching and a premium finish, because your emotional baggage deserves to be carried in style. Perfect for groceries, heavy laptops, and childhood memories. Carrying More Than It Should.",
+        badge: "Predicted #1",
+        features: ["24oz ultra-heavy cotton duck canvas", "Reinforced box-stitch handles", "Double-reinforced bottom base", "Subtle interior secure pouch pocket"],
+        customizable: true
+    },
+    {
+        id: "soft-place-to-process-things-pillow",
+        name: "Soft Place To Process Things Pillow",
+        price: 42.00,
+        category: "pillows",
+        collections: ["overthinker", "best-sellers"],
+        wittyTag: "Available for hugs 24/7.",
+        description: "Professional Nap Assistant. A luxury velvet-touch pillow that offers a soft landing for your hardest thoughts. Perfect for staring at the ceiling, replaying the day, or just avoiding the world for twenty minutes. Soft enough for a crisis.",
+        badge: "Nap Assistant",
+        features: ["Luxury velvet-touch removable cover", "Invisible polished brass zipper", "Hypoallergenic down-alternative insert", "Comforting structural density"],
+        customizable: true
+    },
+    {
+        id: "hydrated-barely-tumbler",
+        name: "Hydrated. Barely. Tumbler",
+        price: 38.00,
+        category: "tumblers",
+        collections: ["best-sellers", "burnout"],
+        wittyTag: "Hydrated. Barely.",
+        description: "Official Sustenance Delivery System. For when you're doing the bare minimum to stay a biological entity. This double-walled, gold-accented tumbler keeps your water cold and your vibes controlled. Certified Emotional Support Beverage Container.",
+        badge: "Survival Companion",
+        features: ["Premium 18/8 food-grade stainless steel", "Double-wall vacuum insulation", "Leak-proof straw-compatible lid", "Elegant matte finish with gold accents"],
+        customizable: true
+    },
+    {
+        id: "welcome-please-lower-your-expectations-metal-sign",
+        name: "Welcome. Please Lower Your Expectations. Metal Sign",
+        price: 45.00,
+        category: "signs",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "Welcome. Please Lower Your Expectations.",
+        description: "Setting the Bar. A premium metal sign with a minimalist aesthetic. The perfect way to greet guests and manage their expectations in one sleek, durable piece of home decor. Preventing disappointments since 2026.",
+        badge: "Guest Management",
+        features: ["Heavy gauge industrial aluminum", "Embossed letters with gold lacquer edges", "Scratch-resistant matte finish coating", "Pre-drilled corner holes for easy mounting"],
+        customizable: true
+    },
+
+    // --- ACCESSORIES GRID - HATS (Section 5 of Copy) ---
+    {
+        id: "emotional-support-hat",
+        name: "Emotional Support Hat",
+        price: 28.00,
+        category: "hats",
+        collections: ["introvert"],
+        wittyTag: "For days when eye contact feels ambitious.",
+        description: "A premium washed cotton twill dad hat designed to keep your head down and your boundaries up. Soft, broken-in feel from day one. Ideal for dodging direct contact.",
+        badge: "Shielding Piece",
+        features: ["100% washed cotton twill", "Subtle embroidered text on front", "Adjustable sliding brass clasp", "Unstructured comfortable profile"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-trucker-hat",
+        name: "Emotional Support Trucker Hat",
+        price: 28.00,
+        category: "hats",
+        collections: ["introvert", "burnout"],
+        wittyTag: "Hiding bad hair days and bad decisions since forever.",
+        description: "A classic mesh trucker cap that breathes as easily as you wish you did under stress. Keeps your face shaded and your hair hidden, with maximum comfort.",
+        badge: "Breathable Cover",
+        features: ["Premium supportive mesh backing", "Adjustable plastic snap snapback", "Structured foam front visor", "Embroidered service emblem"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-ballcap",
+        name: "Emotional Support Ballcap",
+        price: 28.00,
+        category: "hats",
+        collections: ["corporate", "overthinker"],
+        wittyTag: "Low profile. High overthink.",
+        description: "A relaxed, premium ballcap for the chronically overworked and under-vacationed. Soft brushed finish that conforms comfortably to your thoughts.",
+        badge: "Chronically Tired",
+        features: ["Brushed heavy cotton finish", "Sweat-wicking interior lining strip", "Adjustable self-fabric strap buckle", "Embroidered witty logo text"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-beanie",
+        name: "Emotional Support Beanie",
+        price: 28.00,
+        category: "hats",
+        collections: ["introvert", "overthinker"],
+        wittyTag: "For keeping warm and avoiding conversations.",
+        description: "A thick, double-knit ribbed beanie that offers maximum physical warmth and immediate conversational deflection. Stretchy, comfortable, and warm.",
+        badge: "Acoustic Shield",
+        features: ["Premium warm wool-acrylic blend", "Thick double-knit ribbing structure", "Adjustable fold-over cuff", "Tiny stitched heart detailing"],
+        customizable: true
+    },
+
+    // --- ACCESSORIES GRID - MUGS & DRINKWARE ---
+    {
+        id: "emotional-support-mug",
+        name: "Emotional Support Mug",
+        price: 24.00,
+        category: "mugs",
+        collections: ["burnout", "overthinker"],
+        wittyTag: "Contains coffee and emotional stability.",
+        description: "A beautiful, hand-reactive glazed stoneware mug designed to cup comfortably in both hands. Keeps your hot coffee warm and your emotional stability moderately level.",
+        badge: "Morning Lifeline",
+        features: ["15oz heavy-gauge stoneware ceramic", "Dual reactive cream & charcoal glaze", "Wide stable flat base", "Dishwasher safe. (Just kidding. Mostly talking about you.)"],
+        customizable: true
+    },
+    {
+        id: "official-emotional-support-caffeine-delivery-system",
+        name: "Official Caffeine Delivery System Mug",
+        price: 24.00,
+        category: "mugs",
+        collections: ["corporate", "burnout"],
+        wittyTag: "Refill as necessary.",
+        description: "A matte-finish ceramic vessel stamped with bold corporate defense instructions. Ergonomically shaped to hold enough coffee to survive back-to-back status updates.",
+        badge: "HR Certified",
+        features: ["16oz high-capacity ceramic build", "Textured matte charcoal finish", "Real gold foil detail accents", "Ergonomic large ring handle"],
+        customizable: true
+    },
+    {
+        id: "certified-emotional-support-beverage-container",
+        name: "Certified Beverage Container",
+        price: 38.00,
+        category: "tumblers",
+        collections: ["introvert", "overthinker"],
+        wittyTag: "Carried everywhere. Like the anxiety.",
+        description: "An incredibly durable insulated container that follows you through every zoom call and grocery run. Incredibly secure retention limits any potential leakage of cold or warm drinks.",
+        badge: "Inseparable",
+        features: ["Heavy-duty food-grade stainless steel", "Leak-proof rotating gasket lid", "Premium non-slip powder coating", "Includes stainless straw and cleaning brush"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-stanley",
+        name: "Emotional Support Stanley",
+        price: 42.00,
+        category: "tumblers",
+        collections: ["best-sellers", "corporate"],
+        wittyTag: "For people who bring their entire personality to work.",
+        description: "The premium 40oz handled travel mug. Keeps you completely hydrated through long spreadsheet sessions. Generous size acts as an effective physical barrier between you and colleagues.",
+        badge: "Personality substitute",
+        features: ["40oz immense volume capacity", "Ergonomic heavy-grip comfort handle", "Narrow base fits standard cup holders", "Double-wall vacuum insulation thermal lock"],
+        customizable: true
+    },
+
+    // --- ACCESSORIES GRID - PENS & WRITING ---
+    {
+        id: "emotional-support-pen",
+        name: "Emotional Support Pen",
+        price: 18.00,
+        category: "pens",
+        collections: ["corporate", "overthinker"],
+        wittyTag: "The one pen that actually writes.",
+        description: "A beautifully weighted pen that feels spectacular in the hand. Ideal for journaling, drafting passive-aggressive post-its, or signing documents you didn't read.",
+        badge: "Tactile Joy",
+        features: ["Solid brass inner core weight", "Matte soft-touch velvet jacket", "Fine 0.5mm Japanese liquid black gel ink", "Elegant gift box wrapping"],
+        customizable: true
+    },
+    {
+        id: "borrowed-never-returned-pen-set",
+        name: "Borrowed & Never Returned Pen Set",
+        price: 18.00,
+        category: "pens",
+        collections: ["corporate", "burnout"],
+        wittyTag: "Signing documents I didn't read since 2026.",
+        description: "A premium set of three click gel pens engraved with corporate defense triggers. A spectacular conversation piece for the open-office desk.",
+        badge: "Stolen Gold",
+        features: ["Solid brass weighted cores", "Three distinct hilarious engravings", "Smooth fine-point black gel cartridge", "Gold-toned metal secure clips"],
+        customizable: true
+    },
+
+    // --- ACCESSORIES GRID - SIGNS & WALL ART ---
+    {
+        id: "working-on-it-since-2026",
+        name: "Working On It — Since 2026 Sign",
+        price: 45.00,
+        category: "signs",
+        collections: ["burnout", "corporate"],
+        wittyTag: "Working On It — Since 2026",
+        description: "Minimalist brushed metal display plaque designed to hang on workspace doors or rest on desks. Keeps expectations perfectly adjusted.",
+        badge: "Status: Ongoing",
+        features: ["Industrial-weight anodized aluminum", "Pre-drilled mount points", "Scratch-resistant matte coat finish", "Gilded gold perimeter framing"],
+        customizable: true
+    },
+    {
+        id: "currently-pretending-to-work",
+        name: "Currently Pretending To Work Sign",
+        price: 45.00,
+        category: "signs",
+        collections: ["corporate"],
+        wittyTag: "Currently Pretending To Work",
+        description: "For the professional slacker who has automated their workflow but still needs to look occupied. Designed to prevent direct interruptions.",
+        badge: "Green Slack State",
+        features: ["Solid brushed charcoal faceplate", "Pre-installed wooden display block stand", "Gilded gold serif engraving", "Professional-grade irony"],
+        customizable: true
+    },
+    {
+        id: "bad-decisions-manufactured-here",
+        name: "Bad Decisions Manufactured Here Sign",
+        price: 45.00,
+        category: "signs",
+        collections: ["overthinker"],
+        wittyTag: "Bad Decisions Manufactured Here",
+        description: "A gorgeous accent plate for bars, kitchens, creative zones, or home offices. Own your choices in premium gold-lacquered lettering.",
+        badge: "High-Volume Output",
+        features: ["Embossed thick-metal plate base", "Brilliant deep contrast coloring", "Rust-proof aluminum construction", "Durable outdoor-ready lacquer coating"],
+        customizable: true
+    },
+    {
+        id: "emotionally-supported-by-sarcasm",
+        name: "Emotionally Supported By Sarcasm Sign",
+        price: 45.00,
+        category: "signs",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "Emotionally Supported By Sarcasm",
+        description: "A beautiful, minimalist statement piece representing your primary coping mechanism. Features crisp, elegant lettering and our tiny heart detail.",
+        badge: "Structural Sarcasm",
+        features: ["Premium heavy aluminum core", "Rounded comfort safety corners", "Silkscreened weather-resistant ink", "Pre-installed mounting backing tape"],
+        customizable: true
+    },
+    {
+        id: "everything-is-fine-wall-art",
+        name: "Everything Is Fine™ Wall Art",
+        price: 45.00,
+        category: "signs",
+        collections: ["burnout", "corporate"],
+        wittyTag: "Everything Is Fine™",
+        description: "An elegant, minimalist framed canvas print featuring our trademarked slogan. A beautiful denial statement piece for high-stress spaces.",
+        badge: "Premium Art",
+        features: ["Archival grade textured cotton canvas", "Floating solid wood frame wrapping", "Gold-foil accent logo inlay", "Museum-quality protective finish"],
+        customizable: true
+    },
+    {
+        id: "surviving-out-of-spite-wall-art",
+        name: "Surviving Out Of Spite Wall Art",
+        price: 45.00,
+        category: "signs",
+        collections: ["burnout", "best-sellers"],
+        wittyTag: "Surviving Out Of Spite",
+        description: "typographic framed art print asserting spite as your primary clean-burning energy source. Clean, elegant, and highly motivating.",
+        badge: "Archival Quality",
+        features: ["Heavy watercolor stock paper face", "Deep matte ash-wood framing profile", "Contrast high-intensity ink print", "Acid-free conservation backing"],
+        customizable: true
+    },
+    {
+        id: "doing-my-best-wall-art",
+        name: "Doing My Best Wall Art",
+        price: 45.00,
+        category: "signs",
+        collections: ["overthinker", "introvert"],
+        wittyTag: "Doing My Best",
+        description: "A soft, reassuring framed print that reminds you of your efforts. Elegant serif print with our tiny stitched-heart design.",
+        badge: "Warm Reassurance",
+        features: ["Hand-pulled letterpress cotton paper", "Polished real brass framing outline", "Premium matting shadowbox style", "Inspirational self-care focus"],
+        customizable: true
+    },
+    {
+        id: "currently-buffering-wall-art",
+        name: "Currently Buffering Wall Art",
+        price: 45.00,
+        category: "signs",
+        collections: ["burnout"],
+        wittyTag: "Currently Buffering",
+        description: "A gorgeous, high-concept abstract art print capturing the state of loading in our high-speed modern society. Perfect above a work-desk.",
+        badge: "Modern Concept",
+        features: ["Fine-art custom giclée printing", "Thick protective matte glaze cover", "Semi-brushed charcoal metal border", "High-contrast geometric appeal"],
+        customizable: true
+    },
+    {
+        id: "cryptid-wall-art",
+        name: "One Minor Inconvenience Away Wall Art",
+        price: 45.00,
+        category: "signs",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "One Minor Inconvenience Away From Becoming A Cryptid",
+        description: "A high-fidelity dark-toned typographic art print. Warns everyone of your imminent transition into the silent moss of the deep woods.",
+        badge: "Cryptid Mode",
+        features: ["Premium velvet-finish charcoal paper", "Subtle gold-foil accent thread detail", "Sleek floating wooden mount structure", "Enhances interior space acoustics"],
+        customizable: true
+    },
+
+    // --- ACCESSORIES GRID - NOVELTIES, BAGS & HOME ---
+    {
+        id: "emotional-support-memory",
+        name: "Emotional Support Memory Metal Photo",
+        price: 45.00,
+        category: "photos",
+        collections: ["overthinker"],
+        wittyTag: "For remembering the good times and ignoring the rest.",
+        description: "A high-definition sublimation-printed metal photo card resting in a premium gilded display stand. Capture a beautiful moment, while ignoring everything else. This Picture Is Doing A Lot Of Heavy Lifting.",
+        badge: "Custom Photo",
+        features: ["High-gloss sublimation-ready aluminum", "Brushed-gold heavy desktop block mount", "Scratch-resistant thermal-dye finish", "Highly customizable surface"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-coaster-set",
+        name: "Emotional Support Coaster Set",
+        price: 24.00,
+        category: "coasters",
+        collections: ["introvert", "best-sellers"],
+        wittyTag: "Preventing rings and emotional damage.",
+        description: "Set of four premium gold-rimmed ceramic drink coasters. Gilded circular printing tells everyone where to park their drinks and their problems. Supporting Drinks Since Day One.",
+        badge: "Surface Guard",
+        features: ["Set of four absorbency-glazed coasters", "Premium thick non-slip cork backs", "Gilded gold ring detailing edges", "Stamped with circular coping copy"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-tote",
+        name: "Emotional Support Tote",
+        price: 24.00,
+        category: "bags",
+        collections: ["introvert"],
+        wittyTag: "Carrying More Than It Should.",
+        description: "An elegant cream canvas utility bag featuring our signature stitched heart emblem. Perfect for daily commutes, shopping runs, or carrying literal baggage.",
+        badge: "Daily Carrier",
+        features: ["15oz heavyweight organic cotton canvas", "Reinforced secure bottom panels", "Internal zip-pocket for valuable keys", "Comfort-rounded long drop straps"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-backpack",
+        name: "Emotional Support Backpack",
+        price: 68.00,
+        category: "bags",
+        collections: ["burnout", "overthinker"],
+        wittyTag: "Filled with snacks, chargers, and unresolved issues.",
+        description: "A premium water-resistant urban travel pack. Fully padded to hold notebooks, electronic accessories, and emotional problems securely zipped.",
+        badge: "Urban Commute",
+        features: ["Water-repellent heavy canvas wrap", "Padded compartment fits up to 16-inch laptops", "Ergonomic breathable back support plates", "Multiple secure quick-access pouches"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-duffle",
+        name: "Emotional Support Duffle",
+        price: 88.00,
+        category: "bags",
+        collections: ["best-sellers", "introvert"],
+        wittyTag: "Packed. Mentally unprepared.",
+        description: "A luxury washed-canvas weekend duffle bag with premium top-grain leather straps. Perfect for escape trips, early departures, and weekend retreats. Packed. Mentally unprepared.",
+        badge: "Escape Gear",
+        features: ["Heavy-duty military washed canvas shell", "Premium grain-leather padded carry handles", "Adjustable detachable woven shoulder strap", "Fully lined moisture-wicking interior lining"],
+        customizable: true
+    },
+    {
+        id: "emotional-support-towel",
+        name: "Emotional Support Towel",
+        price: 48.00,
+        category: "towels",
+        collections: ["introvert"],
+        wittyTag: "For beach days and breakdowns. Emotionally absorbent.",
+        description: "An extraordinarily thick, luxury Turkish cotton bath/beach towel. Highly absorbent, warm, and comforting. Designed for dry skin and dry tears. Drying Tears Since 2026.",
+        badge: "Comfort-Absorbent",
+        features: ["100% organic long-staple Turkish cotton", "Incredible heavyweight 600gsm density", "Complimentary gold accent thread tassels", "Pre-washed for instant luxury softness"],
+        customizable: true
+    },
+    {
+        id: "overthinking-headquarters-pillow",
+        name: "Overthinking Headquarters Pillow",
+        price: 42.00,
+        category: "pillows",
+        collections: ["overthinker"],
+        wittyTag: "A soft place to process things.",
+        description: "The ultimate cushion for deep mental debates. Crafted in beautiful natural linen with a contrast satin-stitch typography design. Soft enough for a crisis.",
+        badge: "Deep Thinker",
+        features: ["100% natural breathable organic linen", "Satin-stitched typographic cover block", "Hypoallergenic feather-touch insert", "Fully removable hidden-zip shell"],
+        customizable: true
+    }
+];
+
+// Reusable custom items for the sublimation custom designer tool
+const customCategories = [
+    { id: "hoodies", name: "Premium Hoodie", basePrice: 85.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "tees", name: "Heavyweight Tee", basePrice: 42.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2"] },
+    { id: "hats", name: "Emotional Support Hat", basePrice: 32.00, colors: ["#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "mugs", name: "Support Coffee Mug", basePrice: 28.00, colors: ["#F8F4EE"] },
+    { id: "tumblers", name: "Support Tumbler", basePrice: 42.00, colors: ["#F8F4EE", "#2B2B2B", "#8FA9C7"] },
+    { id: "bags", name: "Emotional Baggage Tote", basePrice: 28.00, colors: ["#F8F4EE"] },
+    { id: "pillows", name: "Support Pillow", basePrice: 42.00, colors: ["#F8F4EE", "#8FA9C7"] },
+    { id: "towels", name: "Support Towel", basePrice: 48.00, colors: ["#F8F4EE"] },
+    { id: "signs", name: "Support Metal Sign", basePrice: 48.00, colors: ["#C6A96B", "#2B2B2B"] },
+    { id: "coasters", name: "Support Coaster Set", basePrice: 24.00, colors: ["#F8F4EE", "#2B2B2B"] },
+    { id: "pens", name: "Support Pen", basePrice: 22.00, colors: ["#2B2B2B"] },
+    
+    // --- PET ITEMS ---
+    { id: "pet-tags", name: "Emotional Support Pet Tag", basePrice: 18.00, colors: ["#C6A96B", "#2B2B2B"] },
+    { id: "animal-tags", name: "Emotional Support Animal Tag", basePrice: 18.00, colors: ["#C6A96B", "#2B2B2B"] },
+    { id: "bandanas", name: "Emotional Support Pet Bandana", basePrice: 24.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "collars", name: "Emotional Support Collar", basePrice: 26.00, colors: ["#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "leashes", name: "Emotional Support Leash", basePrice: 32.00, colors: ["#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "training-clickers", name: "Emotional Support Training Clicker", basePrice: 14.00, colors: ["#2B2B2B", "#8FA9C7"] },
+
+    // --- DRINKWARE ---
+    { id: "wine-glasses", name: "Emotional Support Wine Glass", basePrice: 28.00, colors: ["#F8F4EE"] },
+    { id: "mason-jars", name: "Emotional Support Mason Jar", basePrice: 26.00, colors: ["#F8F4EE"] },
+    { id: "stainless-steel-water-bottles", name: "Support Stainless Steel Water Bottle", basePrice: 38.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+
+    // --- APPAREL ---
+    { id: "boxer-briefs-briefs", name: "Emotional Support Boxer Briefs & Briefs", basePrice: 28.00, colors: ["#F8F4EE", "#2B2B2B"] },
+    { id: "slippers", name: "Emotional Support Slippers", basePrice: 36.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2"] },
+    { id: "canvas-tennis-shoes", name: "Emotional Support Canvas Shoes", basePrice: 78.00, colors: ["#F8F4EE", "#2B2B2B"] },
+    { id: "shin-guards", name: "Emotional Support Shin Guards", basePrice: 32.00, colors: ["#F8F4EE", "#2B2B2B"] },
+
+    // --- HOME ---
+    { id: "plaques", name: "Emotional Support Plaque", basePrice: 42.00, colors: ["#C6A96B", "#2B2B2B"] },
+    { id: "picture-frames", name: "Emotional Support Picture Frame", basePrice: 38.00, colors: ["#C6A96B", "#2B2B2B", "#F8F4EE"] },
+    { id: "decorative-fans", name: "Emotional Support Decorative Fan", basePrice: 24.00, colors: ["#F8F4EE", "#A8B5A2"] },
+    { id: "throw-blankets", name: "Emotional Support Throw Blanket", basePrice: 68.00, colors: ["#F8F4EE", "#2B2B2B", "#A8B5A2", "#8FA9C7"] },
+    { id: "pot-holders", name: "Emotional Support Pot Holder", basePrice: 18.00, colors: ["#F8F4EE", "#A8B5A2"] },
+
+    // --- OFFICE ---
+    { id: "paperclips", name: "Emotional Support Paperclips Set", basePrice: 12.00, colors: ["#C6A96B", "#2B2B2B"] },
+    { id: "magnets", name: "Emotional Support Magnet", basePrice: 14.00, colors: ["#F8F4EE", "#2B2B2B", "#C6A96B"] },
+    { id: "stickers", name: "Emotional Support Sticker Pack", basePrice: 6.00, colors: ["#F8F4EE", "#2B2B2B"] }
+];
+
+module.exports = {
+    products,
+    customCategories
+};

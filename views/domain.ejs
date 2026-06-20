@@ -1,0 +1,371 @@
+<!-- Domain Planning & Launch Roadmap | Emotional Support Apparel by K&D -->
+
+<section class="py-12 sm:py-20 bg-cream animate-fade-in">
+    <div class="max-w-5xl mx-auto px-6 space-y-12">
+        
+        <!-- Header -->
+        <div class="text-center space-y-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-4 py-1 rounded-full">Launch Operations</span>
+            <h1 class="font-serif text-4xl sm:text-5xl font-extrabold text-charcoal tracking-tight">Domain Planning & Architecture</h1>
+            <p class="font-serif text-lg text-charcoal/60 italic max-w-2xl mx-auto">
+                "Securing our online headquarters. Building the digital infrastructure for emotional validation."
+            </p>
+        </div>
+
+        <!-- Domain Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Primary Domain -->
+            <div class="bg-cream border border-gold/40 p-6 rounded-2xl shadow-sm space-y-4 relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 w-20 h-20 bg-gold/10 rounded-full"></div>
+                <span class="text-xs font-bold text-gold uppercase tracking-wider block">Primary Headquarters</span>
+                <p class="font-serif text-xl font-bold text-charcoal tracking-tight">emosupportapparel.com</p>
+                <p class="text-xs text-charcoal/60 leading-relaxed">
+                    Main Shopify storefront. Houses all branded collections, bundles, and direct-to-garment premium product pages.
+                </p>
+                <div class="flex items-center space-x-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full w-max">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>DNS Config Ready</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Custom Sublimation Mappings -->
+            <div class="bg-cream border border-charcoal/10 p-6 rounded-2xl shadow-sm space-y-4">
+                <span class="text-xs font-bold text-sage uppercase tracking-wider block">Shopify App Proxy</span>
+                <p class="font-serif text-xl font-bold text-charcoal tracking-tight">/apps/custom-designer</p>
+                <p class="text-xs text-charcoal/60 leading-relaxed">
+                    App proxy mapping that tunnels our high-performance Node.js custom tool (port 3000) directly into our primary domain.
+                </p>
+                <div class="flex items-center space-x-1.5 text-xs text-gold font-semibold bg-gold/5 px-2.5 py-1 rounded-full w-max">
+                    <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+                    <span>Proxy Plan Ready</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Domain Safe-guards -->
+            <div class="bg-cream border border-charcoal/10 p-6 rounded-2xl shadow-sm space-y-4">
+                <span class="text-xs font-bold text-dustyblue uppercase tracking-wider block">Redirect Safe-Guards</span>
+                <p class="font-serif text-xl font-bold text-charcoal tracking-tight">Secondary Domains</p>
+                <p class="text-xs text-charcoal/60 leading-relaxed">
+                    Redirecting traffic from `.co`, `.club`, `.care`, and `.info` properties directly to primary domain to prevent copycats.
+                </p>
+                <div class="flex items-center space-x-1.5 text-xs text-charcoal/55 font-semibold bg-charcoal/5 px-2.5 py-1 rounded-full w-max">
+                    <span class="w-1.5 h-1.5 rounded-full bg-charcoal/40"></span>
+                    <span>Domains Parked</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Technical DNS Configuration Table -->
+        <div class="bg-cream border border-charcoal/10 rounded-2xl overflow-hidden p-6 sm:p-8 space-y-6 shadow-sm">
+            <div class="space-y-1">
+                <h2 class="font-serif text-2xl font-bold text-charcoal">DNS Configuration Matrix</h2>
+                <p class="text-xs text-charcoal/50 uppercase tracking-widest">Shopify Primary Mapping Configuration</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-charcoal/10 text-charcoal/60 uppercase tracking-wider">
+                            <th class="pb-3 font-semibold">Type</th>
+                            <th class="pb-3 font-semibold">Host / Name</th>
+                            <th class="pb-3 font-semibold">Value / Target</th>
+                            <th class="pb-3 font-semibold">TTL</th>
+                            <th class="pb-3 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-charcoal/5 text-charcoal/80">
+                        <tr>
+                            <td class="py-3 font-bold text-charcoal">A</td>
+                            <td class="py-3">@</td>
+                            <td class="py-3">23.227.38.65 (Shopify Primary IP)</td>
+                            <td class="py-3">Automatic</td>
+                            <td class="py-3 text-emerald-600 font-semibold">✓ Verified</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-charcoal">CNAME</td>
+                            <td class="py-3">www</td>
+                            <td class="py-3">shops.myshopify.com</td>
+                            <td class="py-3">Automatic</td>
+                            <td class="py-3 text-emerald-600 font-semibold">✓ Verified</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-charcoal">TXT</td>
+                            <td class="py-3">@</td>
+                            <td class="py-3">shopify-verification-hash-kd2026</td>
+                            <td class="py-3">3600</td>
+                            <td class="py-3 text-emerald-600 font-semibold">✓ Verified</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-charcoal">MX</td>
+                            <td class="py-3">@</td>
+                            <td class="py-3">aspmx.l.google.com (GSuite mail setup)</td>
+                            <td class="py-3">1 Hour</td>
+                            <td class="py-3 text-emerald-600 font-semibold">✓ Active</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Custom Sublimation Integration Architecture Plan -->
+        <div class="bg-charcoal text-cream rounded-3xl p-8 sm:p-12 space-y-8 relative overflow-hidden shadow-2xl">
+            <!-- Architectural Background graphics -->
+            <div class="absolute right-0 top-0 w-64 h-64 bg-gold/10 rounded-full blur-2xl"></div>
+            
+            <div class="space-y-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-gold">Integration Architecture Blueprint</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-cream tracking-tight leading-tight">
+                    Custom Sublimation Integration Plan
+                </h2>
+                <div class="w-12 h-0.5 bg-gold"></div>
+            </div>
+
+            <p class="text-cream/70 text-sm leading-relaxed max-w-3xl">
+                To keep the user-facing storefront on a single premium origin (<code class="text-gold font-mono">emosupportapparel.com</code>) while leveraging our robust live customization tool, we will deploy a **Shopify App Proxy** architecture. This avoids any cross-domain CORS issues, increases search authority, and provides a completely seamless experience.
+            </p>
+
+            <!-- Step by Step integration roadmap -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pt-4">
+                
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-gold uppercase tracking-wider block">Step 01</span>
+                    <h3 class="font-serif text-lg font-bold">Proxy Mapping</h3>
+                    <p class="text-xs text-cream/60 leading-relaxed">
+                        In Shopify App Settings, map path <code class="text-gold font-mono">/apps/custom-designer</code> directly to our standalone server endpoint on port 3000.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-gold uppercase tracking-wider block">Step 02</span>
+                    <h3 class="font-serif text-lg font-bold">Secure Uploads</h3>
+                    <p class="text-xs text-cream/60 leading-relaxed">
+                        Customer images are read via JavaScript FileReader, uploaded securely to Cloudinary/S3 storage buckets via signed API routes.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-gold uppercase tracking-wider block">Step 03</span>
+                    <h3 class="font-serif text-lg font-bold">Cart Injection</h3>
+                    <p class="text-xs text-cream/60 leading-relaxed">
+                        The live design outputs an absolute image URL and text layer properties which are injected directly as Shopify "Line Item Properties" in the cart AJAX request.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-gold uppercase tracking-wider block">Step 04</span>
+                    <h3 class="font-serif text-lg font-bold">Full Sublimation</h3>
+                    <p class="text-xs text-cream/60 leading-relaxed">
+                        Our fulfillment center fetches high-resolution print assets directly from the order payload for accurate 2026 dye sublimation printing.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Launch Roadmap Timeline -->
+        <div class="space-y-8">
+            <div class="text-center">
+                <h2 class="font-serif text-3xl font-bold text-charcoal">Launch Timeline Roadmap</h2>
+                <p class="text-xs text-charcoal/40 uppercase tracking-widest mt-1">Countdown to 2026 Public Beta</p>
+            </div>
+
+            <!-- Horizontal Timeline representation -->
+            <div class="relative py-8">
+                <!-- Center line -->
+                <div class="absolute inset-x-0 top-1/2 h-0.5 bg-charcoal/10 -translate-y-1/2 hidden md:block"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-8 relative z-10">
+                    
+                    <!-- Milestone 1 -->
+                    <div class="bg-cream border border-charcoal/10 rounded-xl p-5 space-y-2 text-center md:text-left shadow-sm">
+                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest block">Phase 1 (Complete)</span>
+                        <h4 class="font-serif text-base font-bold">Brand Blueprint</h4>
+                        <p class="text-xs text-charcoal/60">Defined wittiness parameters, color palette, logo assets & domain safe-guard plan.</p>
+                    </div>
+
+                    <!-- Milestone 2 -->
+                    <div class="bg-cream border border-charcoal/10 rounded-xl p-5 space-y-2 text-center md:text-left shadow-sm">
+                        <span class="text-[10px] font-bold text-gold uppercase tracking-widest block">Phase 2 (In Progress)</span>
+                        <h4 class="font-serif text-base font-bold">Creative Assets</h4>
+                        <p class="text-xs text-charcoal/60">Writing premium luxury copy, witty tags, and designing high-fidelity homepage mockups.</p>
+                    </div>
+
+                    <!-- Milestone 3 -->
+                    <div class="bg-cream border border-gold rounded-xl p-5 space-y-2 text-center md:text-left shadow-md ring-1 ring-gold">
+                        <span class="text-[10px] font-bold text-gold uppercase tracking-widest block">Phase 3 (Active)</span>
+                        <h4 class="font-serif text-base font-bold">Storefront Foundation</h4>
+                        <p class="text-xs text-charcoal/60">Scaffolding core Shopify templates, custom designer tool, routing, and DNS mapping plans.</p>
+                    </div>
+
+                    <!-- Milestone 4 -->
+                    <div class="bg-cream border border-charcoal/10 rounded-xl p-5 space-y-2 text-center md:text-left shadow-sm opacity-60">
+                        <span class="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest block">Phase 4 (Q3 2026)</span>
+                        <h4 class="font-serif text-base font-bold">Beta Trials</h4>
+                        <p class="text-xs text-charcoal/60">Injecting real custom orders into sandbox print runs to stress-test high-resolution sublimation.</p>
+                    </div>
+
+                    <!-- Milestone 5 -->
+                    <div class="bg-cream border border-charcoal/10 rounded-xl p-5 space-y-2 text-center md:text-left shadow-sm opacity-60">
+                        <span class="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest block">Phase 5 (Q4 2026)</span>
+                        <h4 class="font-serif text-base font-bold">Public Release</h4>
+                        <p class="text-xs text-charcoal/60">Opening direct shopping and viral social media campaigns. Validation not included.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Vercel Deployment & Stripe Payment Integration Architecture -->
+        <div class="border-t border-charcoal/10 pt-12 space-y-8">
+            <div class="text-center space-y-2">
+                <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-4 py-1 rounded-full">Serverless Operational Core</span>
+                <h2 class="font-serif text-3xl font-bold text-charcoal">Vercel & Stripe Integration Operational Hub</h2>
+                <p class="text-xs text-charcoal/50 max-w-lg mx-auto leading-relaxed">
+                    How our zero-maintenance, zero-fee Node.js/Express backend integrates with Vercel Serverless Functions and Stripe Checkout.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Left: Vercel serverless details -->
+                <div class="bg-cream border border-charcoal/10 p-6 sm:p-8 rounded-2xl shadow-sm space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-gold uppercase tracking-wider block">Serverless Deployment</span>
+                        <h3 class="font-serif text-xl font-bold text-charcoal tracking-tight">Zero-Fee Hosting on Vercel</h3>
+                    </div>
+                    
+                    <p class="text-xs text-charcoal/70 leading-relaxed">
+                        To maintain a fully custom storefront without paying Shopify's monthly subscription fees, our Node.js/Express application is packaged for deployment to Vercel's **free tier**. 
+                    </p>
+
+                    <div class="space-y-3 pt-2 text-xs">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Express Routing Tunnel</p>
+                                <p class="text-charcoal/60">Vercel handles routing dynamically via <code class="text-gold font-mono bg-charcoal/5 px-1.5 py-0.5 rounded text-[10px]">vercel.json</code>, tunnel-mapping all wildcards to our Express serverless entry point.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Deployment Command</p>
+                                <p class="text-charcoal/60">No Git repository is required. The application can be deployed securely from any terminal by typing: <code class="text-gold font-mono bg-charcoal/5 px-1.5 py-0.5 rounded text-[10px]">npx vercel --prod</code>.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Apex Domain Support</p>
+                                <p class="text-charcoal/60">Vercel handles root domains with zero fees. Map <code class="text-gold font-mono bg-charcoal/5 px-1.5 py-0.5 rounded text-[10px]">emosupportapparel.com</code> directly using Vercel DNS servers or an A record.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Stripe Payment configuration -->
+                <div class="bg-cream border border-charcoal/10 p-6 sm:p-8 rounded-2xl shadow-sm space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-gold uppercase tracking-wider block">Secure Payment Architecture</span>
+                        <h3 class="font-serif text-xl font-bold text-charcoal tracking-tight">Active Stripe Checkout Session Integration</h3>
+                    </div>
+
+                    <p class="text-xs text-charcoal/70 leading-relaxed">
+                        Our payment system is completely integrated. Clicking a checkout button immediately contacts the Stripe API to create a secure checkout session, routing the customer directly to Stripe's secure PCI-compliant page.
+                    </p>
+
+                    <div class="space-y-3 pt-2 text-xs">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Sublimation Metadata Ingestion</p>
+                                <p class="text-charcoal/60">Custom texts, font selections, uploaded image URLs, sizes, and colors are parsed and written as **Stripe Session Metadata**, which is visible inside our Stripe Merchant Dashboard.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Resilient Dual-Mode Execution</p>
+                                <p class="text-charcoal/60">When the Stripe Secret Key is absent, checkout seamlessly falls back to a **Simulated Stripe Checkout**, demonstrating our receipt processing and EJS receipt templates.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-gold mt-0.5">✦</span>
+                            <div>
+                                <p class="font-bold text-charcoal">Dynamic Order Receipts</p>
+                                <p class="text-charcoal/60">Once payment is complete, customers redirect to a beautifully designed order success receipt, dynamically displaying their printed slogan and order details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Merchant Fulfillment and Domain Configuration Matrix -->
+            <div class="bg-charcoal text-cream rounded-3xl p-8 sm:p-12 space-y-8 relative overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    
+                    <!-- Domain Settings -->
+                    <div class="space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold">Domain Connection Matrix (Vercel)</span>
+                        <h3 class="font-serif text-2xl font-bold text-cream tracking-tight">Mapping emosupportapparel.com</h3>
+                        <div class="w-12 h-0.5 bg-gold"></div>
+                        <p class="text-xs text-cream/70 leading-relaxed">
+                            To redirect traffic to Vercel instead of Shopify, the owner must update their DNS settings at their domain registrar (e.g., GoDaddy, Namecheap) to map to these records:
+                        </p>
+                        
+                        <div class="space-y-3 pt-2 text-xs">
+                            <div class="bg-cream/5 border border-cream/10 p-3 rounded-lg flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-gold tracking-wide block">A Record (Root / Apex)</span>
+                                    <span class="font-mono text-cream/90 font-semibold text-[11px]">@ (emosupportapparel.com)</span>
+                                </div>
+                                <span class="font-mono text-gold text-[11px] bg-gold/10 px-2.5 py-1 rounded">76.76.21.21</span>
+                            </div>
+                            <div class="bg-cream/5 border border-cream/10 p-3 rounded-lg flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-gold tracking-wide block">CNAME Record (Subdomain)</span>
+                                    <span class="font-mono text-cream/90 font-semibold text-[11px]">www</span>
+                                </div>
+                                <span class="font-mono text-gold text-[11px] bg-gold/10 px-2.5 py-1 rounded">cname.vercel-dns.com</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fulfillment Instructions -->
+                    <div class="space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold">Merchant Operational Fulfillment Guide</span>
+                        <h3 class="font-serif text-2xl font-bold text-cream tracking-tight">Fulfilling Custom Sublimation Orders</h3>
+                        <div class="w-12 h-0.5 bg-gold"></div>
+                        <p class="text-xs text-cream/70 leading-relaxed">
+                            When an order is received, our system forwards the detailed customer design parameters directly to your Stripe Dashboard. To manufacture the custom garments, perform these steps:
+                        </p>
+
+                        <div class="space-y-3 pt-2 text-xs">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-gold font-bold">1.</span>
+                                <p class="text-cream/80">Log in to your **Stripe Dashboard** (dashboard.stripe.com) and navigate to **Payments**.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-gold font-bold">2.</span>
+                                <p class="text-cream/80">Select any transaction. Scroll down to the **Metadata** block to inspect color, size, customText, and customImage parameters.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-gold font-bold">3.</span>
+                                <p class="text-cream/80">For custom images, copy the absolute data URL or storage link from the metadata field to fetch the exact customer-uploaded graphic asset.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-gold font-bold">4.</span>
+                                <p class="text-cream/80">Dye-sublimation print the graphics directly onto our premium luxury-grade cream/charcoal garments according to the specified size and specs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

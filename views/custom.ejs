@@ -1,0 +1,598 @@
+<!-- Custom Sublimation Designer Tool | Emotional Support Apparel by K&D -->
+
+<section class="py-12 sm:py-20 bg-[#F8F4EE]">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-4 mb-12 sm:mb-16">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-4 py-1 rounded-full">Sublimation Lab</span>
+            <h1 class="font-serif text-4xl sm:text-5xl font-bold text-charcoal tracking-tight">Design Your Own</h1>
+            <p class="font-serif text-lg text-charcoal/60 italic max-w-2xl mx-auto">
+                "Custom sublimation. We print your anxieties, logos, or inside jokes in premium luxury."
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT: Interactive Live Preview (6 Cols) -->
+            <div class="lg:col-span-6 space-y-6 sticky top-28">
+                <div class="relative aspect-square bg-cream border border-charcoal/10 rounded-3xl flex items-center justify-center p-12 shadow-lg overflow-hidden transition-all duration-300" id="preview-canvas-container">
+                    
+                    <!-- Decorative bounding box -->
+                    <div class="absolute inset-8 border-2 border-dashed border-gold/25 rounded-2xl pointer-events-none flex items-start justify-center pt-2">
+                        <span class="text-[8px] uppercase tracking-widest text-gold/40 font-bold bg-[#F8F4EE] px-1.5">Print Boundaries</span>
+                    </div>
+
+                    <!-- Canvas Base Representation (will change SVG dynamically) -->
+                    <div class="w-full h-full max-w-xs flex items-center justify-center text-charcoal relative" id="mockup-svg-holder">
+                        <!-- Default Hoodie SVG -->
+                        <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                            <path id="svg-part-sleeves-l" d="M40,90 C30,110 20,150 25,180 C27,190 35,190 40,180 L55,140" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.01"/>
+                            <path id="svg-part-sleeves-r" d="M200,90 C210,110 220,150 215,180 C213,190 205,190 200,180 L185,140" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.01"/>
+                            <path id="svg-part-body" d="M60,90 L60,195 C60,205 70,210 120,210 C170,210 180,205 180,195 L180,90 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                            <path id="svg-part-hood" d="M80,90 C80,60 100,35 120,35 C140,35 160,60 160,90 C160,70 145,55 120,55 C95,55 80,70 80,90" fill="currentColor" fill-opacity="0.05" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path id="svg-part-pocket" d="M85,150 L155,150 L165,185 C165,190 160,195 155,195 L85,195 Z" fill="currentColor" fill-opacity="0.04"/>
+                        </svg>
+
+                        <!-- Dynamic Upload Image Layer Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" id="uploaded-image-layer" style="display: none;">
+                            <img src="" id="sublimation-user-image" class="max-w-[120px] max-h-[120px] object-contain opacity-80" style="transform: scale(1); rotate: 0deg;" alt="Custom Upload Preview">
+                        </div>
+
+                        <!-- Dynamic Text Layer Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none" id="custom-text-layer" style="display: none;">
+                            <div id="sublimation-user-text" class="text-center font-serif text-sm font-bold tracking-tight text-charcoal break-words max-w-[180px] leading-snug" style="font-size: 14px; color: #2B2B2B; transform: scale(1);">
+                                
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Watermark -->
+                    <span class="absolute bottom-4 right-4 text-[9px] uppercase tracking-widest text-charcoal/20 font-bold select-none">
+                        ESA Studio Preview
+                    </span>
+                </div>
+
+                <!-- Guidance note -->
+                <div class="bg-gold/10 border border-gold/20 p-4 rounded-xl text-center text-xs text-charcoal/70">
+                    💡 <span class="font-bold">Real-time Dye Sublimation:</span> What you see is exactly what our printing press will dye into the fabric. Move, scale, and adjust to make it your own.
+                </div>
+            </div>
+
+            <!-- RIGHT: Customizer Options Console (6 Cols) -->
+            <div class="lg:col-span-6 space-y-8 bg-cream border border-charcoal/10 rounded-3xl p-6 sm:p-8 shadow-sm">
+                
+                <h2 class="font-serif text-2xl font-bold text-charcoal border-b border-charcoal/5 pb-4">Personalization Console</h2>
+                
+                <!-- 1. Select Base Product -->
+                <div class="space-y-3">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/50 block">01. Select Luxury Base Canvas</label>
+                    <select id="canvas-select" class="w-full bg-cream border border-charcoal/20 rounded-lg p-3 text-sm focus:border-gold outline-none" onchange="changeBaseProduct(this.value)">
+                        <% customCategories.forEach(cat => { %>
+                            <option value="<%= cat.id %>" data-price="<%= cat.basePrice %>" <%= activeBase === cat.id ? 'selected' : '' %>><%= cat.name %> ($<%= cat.basePrice.toFixed(2) %>)</option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <!-- 2. Select Fabric/Material Color -->
+                <div class="space-y-3">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/50 block">02. Select Base Colorway</label>
+                    <div class="flex items-center space-x-3" id="colorway-container">
+                        <button onclick="changeCanvasColor('#F8F4EE', this)" class="w-8 h-8 rounded-full border-2 border-gold bg-cream shadow-sm" aria-label="Cream"></button>
+                        <button onclick="changeCanvasColor('#2B2B2B', this)" class="w-8 h-8 rounded-full border border-charcoal/20 bg-charcoal shadow-sm" aria-label="Charcoal"></button>
+                        <button onclick="changeCanvasColor('#A8B5A2', this)" class="w-8 h-8 rounded-full border border-charcoal/20 bg-[#A8B5A2] shadow-sm" aria-label="Sage"></button>
+                        <button onclick="changeCanvasColor('#8FA9C7', this)" class="w-8 h-8 rounded-full border border-charcoal/20 bg-[#8FA9C7] shadow-sm" aria-label="Dusty Blue"></button>
+                    </div>
+                </div>
+
+                <!-- 2.5 Select Size -->
+                <div class="space-y-3">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/50 block">02.5 Select Size</label>
+                    <div class="flex flex-wrap gap-2" id="custom-size-container">
+                        <% const customSizes = ["S", "M", "L", "XL"]; %>
+                        <% customSizes.forEach(size => { %>
+                            <button onclick="selectCustomSize(this)" class="px-4 py-2 border <%= size === 'M' ? 'bg-charcoal text-cream border-charcoal' : 'border-charcoal/10 text-charcoal' %> hover:border-charcoal rounded text-xs font-semibold tracking-wider transition-all duration-200">
+                                <%= size %>
+                            </button>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- 3. Personalization: Custom Text -->
+                <div class="space-y-4 border-t border-charcoal/5 pt-6">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/50 block">03. Add Custom Text</label>
+                    
+                    <input type="text" id="text-input" placeholder="Type your custom anxiety, quote, or slogan..." class="w-full bg-cream border border-charcoal/20 rounded-lg p-3 text-sm focus:border-gold outline-none" oninput="updateCustomText(this.value)">
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Font selection -->
+                        <div class="space-y-2">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-charcoal/40">Font Style</span>
+                            <select id="font-select" class="w-full bg-cream border border-charcoal/10 rounded p-2 text-xs outline-none" onchange="changeFont(this.value)">
+                                <option value="font-serif">Elegant Serif</option>
+                                <option value="font-sans">Modern Sans</option>
+                                <option value="tracking-widest uppercase font-bold">Retro Block</option>
+                            </select>
+                        </div>
+                        <!-- Font size slider -->
+                        <div class="space-y-2">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-charcoal/40">Text Scale</span>
+                            <input type="range" min="8" max="28" value="14" class="w-full accent-gold" oninput="changeTextSize(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Text Color selection -->
+                    <div class="space-y-2">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-charcoal/40">Text Ink Color</span>
+                        <div class="flex space-x-2">
+                            <button onclick="changeTextColor('#2B2B2B')" class="w-5 h-5 rounded-full bg-charcoal border border-charcoal/10" aria-label="Black ink"></button>
+                            <button onclick="changeTextColor('#C6A96B')" class="w-5 h-5 rounded-full bg-gold border border-charcoal/10" aria-label="Gold ink"></button>
+                            <button onclick="changeTextColor('#F8F4EE')" class="w-5 h-5 rounded-full bg-cream border border-charcoal/30" aria-label="White ink"></button>
+                            <button onclick="changeTextColor('#A8B5A2')" class="w-5 h-5 rounded-full bg-sage border border-charcoal/10" aria-label="Sage ink"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Personalization: Upload Image -->
+                <div class="space-y-4 border-t border-charcoal/5 pt-6">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/50 block">04. Upload Image or Logo</label>
+                    
+                    <div class="border-2 border-dashed border-charcoal/10 rounded-xl p-6 text-center hover:border-gold/50 transition-all cursor-pointer relative" id="drop-zone">
+                        <input type="file" id="file-input" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleImageUpload(this)">
+                        <div class="space-y-2 pointer-events-none">
+                            <span class="text-3xl block">📸</span>
+                            <p class="text-xs font-bold text-charcoal">Drag and drop or click to upload</p>
+                            <p class="text-[10px] text-charcoal/40">Supports PNG, JPEG, SVG up to 10MB</p>
+                        </div>
+                    </div>
+
+                    <!-- Scale Slider for Image -->
+                    <div class="space-y-2" id="image-scale-container" style="display: none;">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-charcoal/40">Uploaded Image Scale</span>
+                        <input type="range" min="0.4" max="2" step="0.1" value="1" class="w-full accent-gold" oninput="changeImageScale(this.value)">
+                    </div>
+                </div>
+
+                <!-- Summary & Checkout CTA -->
+                <div class="border-t border-charcoal/10 pt-8 space-y-6">
+                    <div class="flex justify-between items-center text-lg font-serif">
+                        <span class="font-bold text-charcoal">Estimated Value:</span>
+                        <span class="font-bold text-gold" id="dynamic-price">$85.00</span>
+                    </div>
+
+                    <button id="custom-checkout-btn" onclick="submitCustomOrder()" class="w-full flex items-center justify-center px-8 py-4 bg-charcoal hover:bg-charcoal/90 text-cream font-bold tracking-widest uppercase text-xs rounded-full shadow-lg hover:shadow-charcoal/15 hover:-translate-y-0.5 transition-all duration-300">
+                        <span id="custom-btn-text">Order Custom Creation</span>
+                        <svg id="custom-btn-spinner" class="hidden animate-spin ml-2 h-4 w-4 text-cream" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+
+                    <p class="text-[10px] text-charcoal/40 text-center uppercase tracking-wider">
+                        🛠️ Free shipping on orders $65+ · Direct Dye Sublimation · Stitched to Order
+                    </p>
+                </div>
+
+                <!-- Custom Quote Section -->
+                <div class="bg-cream border border-charcoal/10 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+                    <h3 class="font-serif text-xl font-bold text-charcoal flex items-center space-x-2">
+                        <span>Have something else in mind?</span>
+                    </h3>
+                    <p class="text-xs text-charcoal/60 leading-relaxed">
+                        Don't see the exact item or canvas type you're looking to personalize? From corporate branded team gifts to custom-pressed leather keychains or customized sports equipment — if it can be pressed or sublimated, we will make it happen. Message us with your idea and we'll give you a bespoke quote.
+                    </p>
+                    <div class="pt-2">
+                        <a href="mailto:orders@emosupportapparel.com?subject=Custom Sublimation Quote Request" class="inline-flex items-center justify-center px-6 py-3 border border-gold hover:bg-gold hover:text-charcoal text-gold font-bold tracking-widest uppercase text-[10px] rounded-full transition-all duration-300">
+                            Get a Custom Quote
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Simple Order Received Modal simulation -->
+<div class="fixed inset-0 bg-charcoal/80 z-50 flex items-center justify-center p-6 opacity-0 invisible transition-all duration-300" id="success-modal">
+    <div class="bg-cream border border-charcoal/10 rounded-2xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-charcoal/50 hover:text-charcoal text-lg" aria-label="Close modal">&times;</button>
+        
+        <div class="w-16 h-16 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto text-3xl">
+            ✨
+        </div>
+
+        <div class="space-y-2">
+            <h3 class="font-serif text-2xl font-bold text-charcoal">Custom Creation Logged</h3>
+            <p class="text-xs text-gold uppercase tracking-widest">Self-Aware Masterpiece Registered</p>
+        </div>
+
+        <p class="text-charcoal/70 text-sm leading-relaxed">
+            Your high-end sublimation printing assets have been rendered and linked to our custom order system. Our dye sublimation process begins scheduled processing in 2026. Comfort is on the horizon.
+        </p>
+
+        <div class="border-t border-charcoal/5 pt-4 text-left text-xs space-y-2 text-charcoal/60">
+            <div class="flex justify-between">
+                <span>Base Item:</span>
+                <span class="font-bold" id="modal-summary-item">Premium Hoodie</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Color Selected:</span>
+                <span class="font-bold" id="modal-summary-color">Cream</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Custom Slogan:</span>
+                <span class="font-bold italic" id="modal-summary-text">None</span>
+            </div>
+        </div>
+
+        <button onclick="closeModal()" class="w-full py-3 bg-charcoal text-cream font-bold text-xs tracking-wider uppercase rounded-full hover:bg-charcoal/90 transition-colors">
+            Continue Designing
+        </button>
+    </div>
+</div>
+
+<!-- Embedded JS Logic for Interactive Mockup Canvas Manipulation -->
+<script>
+    // Selected states
+    let currentBasePrice = 85.00;
+    let selectedColor = '#F8F4EE';
+    let selectedSize = 'M';
+    let selectedText = '';
+    let hasCustomText = false;
+    let hasCustomImage = false;
+
+    // SVG templates dictionary
+    const svgTemplates = {
+        hoodies: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-sleeves-l" d="M40,90 C30,110 20,150 25,180 C27,190 35,190 40,180 L55,140" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.01"/>
+                <path id="svg-part-sleeves-r" d="M200,90 C210,110 220,150 215,180 C213,190 205,190 200,180 L185,140" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.01"/>
+                <path id="svg-part-body" d="M60,90 L60,195 C60,205 70,210 120,210 C170,210 180,205 180,195 L180,90 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path id="svg-part-hood" d="M80,90 C80,60 100,35 120,35 C140,35 160,60 160,90 C160,70 145,55 120,55 C95,55 80,70 80,90" fill="currentColor" fill-opacity="0.05" stroke-linecap="round" stroke-linejoin="round"/>
+                <path id="svg-part-pocket" d="M85,150 L155,150 L165,185 C165,190 160,195 155,195 L85,195 Z" fill="currentColor" fill-opacity="0.04"/>
+            </svg>
+        `,
+        tees: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M40,75 L75,55 L90,70 C100,60 110,58 120,58 C130,58 140,60 150,70 L165,55 L200,75 L185,110 L170,105 L170,200 C170,205 165,210 160,210 L80,210 C75,210 70,205 70,200 L70,105 L55,110 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path id="svg-part-collar" d="M90,70 C100,82 140,82 150,70" stroke-linecap="round" fill="currentColor" fill-opacity="0.05"/>
+            </svg>
+        `,
+        hats: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M50,150 C50,70 190,70 190,150 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path id="svg-part-brim" d="M30,150 C50,140 190,140 210,150 C220,155 200,165 120,165 C40,165 20,155 30,150 Z" fill="currentColor" fill-opacity="0.06" stroke-linejoin="round"/>
+                <path d="M120,150 L120,85" stroke-dasharray="2,2"/>
+            </svg>
+        `,
+        mugs: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M70,70 L170,70 L170,180 C170,195 160,200 150,200 L90,200 C80,200 70,195 70,180 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path id="svg-part-handle" d="M70,90 C45,90 45,160 70,160" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" fill-opacity="0.01"/>
+            </svg>
+        `,
+        tumblers: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M70,60 L170,60 L155,195 C155,202 150,205 140,205 L100,205 C90,205 85,202 85,195 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path d="M65,60 L175,60" stroke-linecap="round" stroke-width="2" fill="currentColor" fill-opacity="0.05"/>
+                <path d="M120,60 L120,25 C120,22 125,20 135,20" stroke-linecap="round" stroke-width="1.5"/>
+            </svg>
+        `,
+        bags: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M50,80 L60,200 C60,205 65,210 70,210 L170,210 C175,210 180,205 190,200 L200,80 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path id="svg-part-handles" d="M90,80 L90,40 C90,35 100,30 120,30 C140,30 150,35 150,40 L150,80" stroke-linecap="round" fill="currentColor" fill-opacity="0.01"/>
+            </svg>
+        `,
+        pillows: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M45,45 C95,35 145,35 195,45 C205,95 205,145 195,195 C145,205 95,205 45,195 C35,145 35,95 45,45 Z" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path d="M45,45 L38,38 M195,45 L202,38 M195,195 L202,202 M45,195 L38,202" stroke-linecap="round"/>
+            </svg>
+        `,
+        towels: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect id="svg-part-body" x="40" y="30" width="160" height="180" rx="4" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <path d="M40,50 L200,50 M40,190 L200,190" stroke-dasharray="3,3"/>
+            </svg>
+        `,
+        signs: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect id="svg-part-body" x="30" y="50" width="180" height="140" rx="8" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <circle cx="40" cy="60" r="3" fill="currentColor"/>
+                <circle cx="200" cy="60" r="3" fill="currentColor"/>
+                <circle cx="200" cy="180" r="3" fill="currentColor"/>
+                <circle cx="40" cy="180" r="3" fill="currentColor"/>
+            </svg>
+        `,
+        coasters: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <circle id="svg-part-body" cx="120" cy="120" r="80" fill="currentColor" fill-opacity="0.03" stroke-linejoin="round"/>
+                <circle cx="120" cy="120" r="72" stroke-dasharray="4,4" stroke-opacity="0.5"/>
+            </svg>
+        `,
+        pens: `
+            <svg class="w-72 h-72 transition-colors duration-500" id="mockup-svg-canvas" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path id="svg-part-body" d="M40,200 L50,190 L180,60 L170,50 L40,180 Z" fill="currentColor" fill-opacity="0.05" stroke-linejoin="round"/>
+                <path d="M40,200 L35,205 L40,180" stroke-linejoin="round"/>
+                <path d="M160,80 L150,70" stroke-width="2"/>
+            </svg>
+        `
+    };
+
+    // Prepopulate designer with routing search query parameter if preloaded
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const preloadedProduct = params.get('product');
+        if (preloadedProduct && svgTemplates[preloadedProduct]) {
+            document.getElementById('canvas-select').value = preloadedProduct;
+            changeBaseProduct(preloadedProduct);
+        }
+    });
+
+    // Handle dynamically changing the base product SVG mockup
+    function changeBaseProduct(category) {
+        const holder = document.getElementById('mockup-svg-holder');
+        const selectEl = document.getElementById('canvas-select');
+        const option = selectEl.options[selectEl.selectedIndex];
+        
+        // Update price
+        currentBasePrice = parseFloat(option.getAttribute('data-price'));
+        updatePriceSummary();
+
+        // Map sub-categories to standard SVG representations
+        const categoryMap = {
+            "pet-tags": "coasters",
+            "animal-tags": "coasters",
+            "bandanas": "towels",
+            "collars": "towels",
+            "leashes": "towels",
+            "training-clickers": "pens",
+            "wine-glasses": "mugs",
+            "mason-jars": "mugs",
+            "stainless-steel-water-bottles": "tumblers",
+            "boxer-briefs-briefs": "tees",
+            "slippers": "pillows",
+            "canvas-tennis-shoes": "pillows",
+            "shin-guards": "signs",
+            "plaques": "signs",
+            "picture-frames": "signs",
+            "decorative-fans": "coasters",
+            "throw-blankets": "towels",
+            "pot-holders": "coasters",
+            "paperclips": "pens",
+            "magnets": "coasters",
+            "stickers": "coasters"
+        };
+        const templateKey = categoryMap[category] || category;
+
+        // Update SVG HTML
+        const template = svgTemplates[templateKey] || svgTemplates.hoodies;
+        
+        // Retain text layer and upload image layer DOM elements
+        const userImgLayer = document.getElementById('uploaded-image-layer');
+        const userTxtLayer = document.getElementById('custom-text-layer');
+        
+        holder.innerHTML = template;
+        holder.appendChild(userImgLayer);
+        holder.appendChild(userTxtLayer);
+
+        // Apply selected base colorway directly to background of SVG elements
+        applyMockupColor();
+    }
+
+    // Canvas Background/Colorway selectors
+    function changeCanvasColor(colorCode, btn) {
+        // Remove active ring styling from all colorway buttons
+        document.querySelectorAll('#colorway-container button').forEach(b => {
+            b.classList.remove('border-gold', 'border-2');
+            b.classList.add('border-charcoal/20', 'border');
+        });
+        
+        // Highlight active button
+        btn.classList.add('border-gold', 'border-2');
+        btn.classList.remove('border-charcoal/20', 'border');
+
+        selectedColor = colorCode;
+        applyMockupColor();
+    }
+
+    function applyMockupColor() {
+        const svgCanvas = document.getElementById('mockup-svg-canvas');
+        if (!svgCanvas) return;
+
+        // Apply fill/stroke to internal dynamic segments representing the canvas
+        const bodyPart = svgCanvas.querySelector('#svg-part-body') || svgCanvas.querySelector('rect') || svgCanvas.querySelector('circle');
+        if (bodyPart) {
+            bodyPart.style.fill = selectedColor;
+            bodyPart.style.fillOpacity = "1.0";
+        }
+
+        // Apply a slightly darker accent fill to sleeves or accents
+        const sleevesL = svgCanvas.querySelector('#svg-part-sleeves-l');
+        const sleevesR = svgCanvas.querySelector('#svg-part-sleeves-r');
+        const pocket = svgCanvas.querySelector('#svg-part-pocket');
+        const brim = svgCanvas.querySelector('#svg-part-brim');
+        const handle = svgCanvas.querySelector('#svg-part-handle');
+
+        const lighterHex = darkenHex(selectedColor, 10);
+        if (sleevesL) sleevesL.style.fill = lighterHex;
+        if (sleevesR) sleevesR.style.fill = lighterHex;
+        if (pocket) pocket.style.fill = lighterHex;
+        if (brim) brim.style.fill = lighterHex;
+        if (handle) handle.style.fill = lighterHex;
+
+        // Automatically toggle SVG outline strokes from black to white based on background brightness
+        const isDark = isColorDark(selectedColor);
+        svgCanvas.style.color = isDark ? '#F8F4EE' : '#2B2B2B';
+    }
+
+    // Helper: Darken colors mathematically for accent textures
+    function darkenHex(hex, percent) {
+        if (hex === '#F8F4EE') return '#EFEAE0';
+        if (hex === '#2B2B2B') return '#1A1A1A';
+        if (hex === '#A8B5A2') return '#98A592';
+        if (hex === '#8FA9C7') return '#7F99B7';
+        return hex;
+    }
+
+    // Helper: detect brightness
+    function isColorDark(hex) {
+        return hex === '#2B2B2B';
+    }
+
+    // Handle Custom Text input
+    function updateCustomText(text) {
+        const layer = document.getElementById('custom-text-layer');
+        const element = document.getElementById('sublimation-user-text');
+        
+        selectedText = text;
+        if (text.trim() === '') {
+            layer.style.display = 'none';
+            hasCustomText = false;
+        } else {
+            layer.style.display = 'flex';
+            element.textContent = text;
+            hasCustomText = true;
+        }
+        updatePriceSummary();
+    }
+
+    // Adjust Font and Scale on text
+    function changeFont(fontClass) {
+        const element = document.getElementById('sublimation-user-text');
+        element.className = "text-center break-words max-w-[180px] leading-snug " + fontClass;
+    }
+
+    function changeTextSize(size) {
+        const element = document.getElementById('sublimation-user-text');
+        element.style.fontSize = size + "px";
+    }
+
+    function changeTextColor(color) {
+        const element = document.getElementById('sublimation-user-text');
+        element.style.color = color;
+    }
+
+    // Handle Image Upload previews
+    function handleImageUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const layer = document.getElementById('uploaded-image-layer');
+            const img = document.getElementById('sublimation-user-image');
+            
+            img.src = e.target.result;
+            layer.style.display = 'flex';
+            document.getElementById('image-scale-container').style.display = 'block';
+            hasCustomImage = true;
+            updatePriceSummary();
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function changeImageScale(scale) {
+        const img = document.getElementById('sublimation-user-image');
+        img.style.transform = `scale(${scale})`;
+    }
+
+    // Update dynamic pricing
+    function updatePriceSummary() {
+        let price = currentBasePrice;
+        if (hasCustomText) price += 5.00; // Premium charge
+        if (hasCustomImage) price += 8.00; // Premium print charge
+
+        document.getElementById('dynamic-price').textContent = `${price.toFixed(2)}`;
+    }
+
+    function selectCustomSize(btn) {
+        // Remove active styling from siblings
+        btn.parentNode.querySelectorAll('button').forEach(b => {
+            b.classList.remove('bg-charcoal', 'text-cream', 'border-charcoal');
+            b.classList.add('border-charcoal/10', 'text-charcoal');
+        });
+        // Add active style to selected
+        btn.classList.add('bg-charcoal', 'text-cream', 'border-charcoal');
+        btn.classList.remove('border-charcoal/10', 'text-charcoal');
+        
+        selectedSize = btn.innerText.trim();
+    }
+
+    async function submitCustomOrder() {
+        const btn = document.getElementById('custom-checkout-btn');
+        const btnText = document.getElementById('custom-btn-text');
+        const spinner = document.getElementById('custom-btn-spinner');
+        
+        if (!btn || btn.disabled) return;
+        
+        // Show loading state
+        btn.disabled = true;
+        btnText.innerText = "Initiating checkout...";
+        spinner.classList.remove('hidden');
+        
+        const selectEl = document.getElementById('canvas-select');
+        const itemName = selectEl.options[selectEl.selectedIndex].text.split(' (
+)[0];
+        const categoryId = selectEl.value;
+        
+        let colorName = "Cream";
+        if (selectedColor === '#2B2B2B') colorName = "Charcoal";
+        if (selectedColor === '#A8B5A2') colorName = "Sage Green";
+        if (selectedColor === '#8FA9C7') colorName = "Dusty Blue";
+
+        // Calculate final price dynamically
+        let finalPrice = currentBasePrice;
+        if (hasCustomText) finalPrice += 5.00;
+        if (hasCustomImage) finalPrice += 8.00;
+
+        const imgEl = document.getElementById('sublimation-user-image');
+        const customImageSrc = hasCustomImage ? imgEl.src : '';
+
+        try {
+            const response = await fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productId: 'custom-sublimation-' + categoryId,
+                    name: `Customized ESA ${itemName}`,
+                    price: finalPrice,
+                    size: selectedSize,
+                    color: colorName,
+                    customText: selectedText,
+                    customImage: customImageSrc,
+                    category: categoryId
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.url) {
+                // Redirect user to Stripe Checkout (or our mock checkout in dev)
+                window.location.href = data.url;
+            } else {
+                throw new Error(data.error || "Unable to initiate payment session.");
+            }
+        } catch (error) {
+            console.error("Custom order payment error:", error);
+            alert("A minor inconvenience occurred while connecting to Stripe: " + error.message);
+            
+            // Restore button state
+            btn.disabled = false;
+            btnText.innerText = "Order Custom Creation";
+            spinner.classList.add('hidden');
+        }
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('success-modal');
+        modal.classList.add('opacity-0', 'invisible');
+        modal.classList.remove('opacity-100', 'visible');
+    }
+</script>

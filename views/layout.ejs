@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F8F4EE] text-[#2B2B2B]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title + ' | Emotional Support Apparel by K&D' : 'Emotional Support Apparel by K&D' %></title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F8F4EE',
+                        charcoal: '#2B2B2B',
+                        sage: '#A8B5A2',
+                        dustyblue: '#8FA9C7',
+                        gold: '#C6A96B',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"DM Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Smooth, premium scrollbar and transitions */
+        html {
+            scroll-behavior: smooth;
+        }
+        ::selection {
+            background-color: #C6A96B;
+            color: #2B2B2B;
+        }
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-full font-sans antialiased bg-cream selection:bg-gold selection:text-charcoal">
+
+    <!-- Top Banner -->
+    <div class="bg-charcoal text-cream text-center py-2 px-4 text-xs tracking-wider uppercase font-medium">
+        ✨ Complimentary shipping on orders over $100 · Luxury you can feel, validation not included.
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-cream/80 backdrop-blur-md border-b border-charcoal/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="/" class="flex items-center space-x-2 group">
+                <span class="font-serif text-2xl font-bold tracking-tight text-charcoal flex items-center">
+                    Emotional Support Apparel
+                    <span class="inline-block ml-1 text-gold relative -top-1">
+                        <!-- Tiny stitched heart SVG -->
+                        <svg class="w-4 h-4 fill-current transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            <path d="M12 19.5l-0.85-0.78C6.15 14.15 3 11.15 3 8.5 3 6.1 4.9 4.2 7.5 4.2c1.45 0 2.85.75 3.65 1.95h1.7c0.8-1.2 2.2-1.95 3.65-1.95 2.6 0 4.5 1.9 4.5 4.3 0 2.65-3.15 5.65-8.15 10.22L12 19.5z" stroke="#F8F4EE" stroke-width="0.5" stroke-dasharray="1,1"/>
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block font-sans text-xs font-normal text-charcoal/50 ml-2 tracking-widest uppercase">by K&D</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Menu -->
+            <nav class="hidden lg:flex items-center space-x-8 font-medium text-sm text-charcoal/80">
+                <a href="/" class="hover:text-gold transition-colors duration-200">Home</a>
+                <div class="relative group">
+                    <button class="hover:text-gold transition-colors duration-200 flex items-center space-x-1">
+                        <span>Collections</span>
+                        <svg class="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="absolute top-full left-0 mt-2 w-56 bg-cream border border-charcoal/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        <div class="py-2">
+                            <a href="/collections/burnout" class="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-charcoal hover:text-cream transition-colors">The Burnout Collection</a>
+                            <a href="/collections/introvert" class="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-charcoal hover:text-cream transition-colors">The Introvert Collection</a>
+                            <a href="/collections/overthinker" class="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-charcoal hover:text-cream transition-colors">The Overthinker Collection</a>
+                            <a href="/collections/corporate" class="block px-4 py-2.5 text-xs tracking-wider uppercase hover:bg-charcoal hover:text-cream transition-colors">The Corporate Survivor Collection</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="/design" class="hover:text-gold transition-colors duration-200 text-gold flex items-center space-x-1 font-semibold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    <span>Design Your Own</span>
+                </a>
+                <a href="/domain-plan" class="hover:text-gold transition-colors duration-200">Domain Launch Plan</a>
+            </nav>
+
+            <!-- Nav Utilities -->
+            <div class="flex items-center space-x-4">
+                <a href="/design" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs tracking-wider uppercase border border-gold hover:bg-gold hover:text-charcoal text-charcoal font-semibold rounded-full transition-all duration-300">
+                    Design Your Own
+                </a>
+                
+                <!-- Simple mock Cart button -->
+                <button onclick="alert('Our cart is emotionally preparing to process your future order! Ready when you are.')" class="p-2 text-charcoal hover:text-gold transition-colors relative" aria-label="Cart">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-gold rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-cream mt-auto border-t border-cream/10">
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                
+                <!-- Col 1: About & Trademark Slogan -->
+                <div class="space-y-6 md:col-span-2">
+                    <h3 class="font-serif text-2xl font-bold tracking-tight text-cream">
+                        Emotional Support Apparel <span class="text-gold font-sans text-xs font-normal uppercase tracking-widest ml-1">by K&D</span>
+                    </h3>
+                    <p class="text-cream/70 text-sm max-w-sm leading-relaxed font-light">
+                        Premium emotional-support gear that makes people feel seen. Witty, relatable, internet-culture humor printed on luxury-quality apparel, accessories, and home goods.
+                    </p>
+                    <div class="italic text-gold text-lg font-serif">
+                        "Comfort for your body. Validation not included."™
+                    </div>
+                </div>
+
+                <!-- Col 2: Collections links -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gold">Collections</h4>
+                    <ul class="space-y-2.5 text-sm text-cream/70">
+                        <li><a href="/collections/burnout" class="hover:text-cream transition-colors">The Burnout Collection</a></li>
+                        <li><a href="/collections/introvert" class="hover:text-cream transition-colors">The Introvert Collection</a></li>
+                        <li><a href="/collections/overthinker" class="hover:text-cream transition-colors">The Overthinker Collection</a></li>
+                        <li><a href="/collections/corporate" class="hover:text-cream transition-colors">The Corporate Survivor Collection</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Customer Care & Custom Sublimation -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gold">Custom Sublimation</h4>
+                    <ul class="space-y-2.5 text-sm text-cream/70">
+                        <li><a href="/design" class="hover:text-cream transition-colors">Custom Design Tool</a></li>
+                        <li><a href="/domain-plan" class="hover:text-cream transition-colors">Domain Planning</a></li>
+                        <li><a href="#" onclick="alert('Contact: support@emosupportapparel.com')" class="hover:text-cream transition-colors">Contact Support</a></li>
+                        <li><span class="text-xs text-cream/40">Ready to print in 2026</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom footer bar -->
+            <div class="border-t border-cream/10 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-cream/40 space-y-4 sm:space-y-0">
+                <div>
+                    &copy; 2026 Emotional Support Apparel by K&D. All rights reserved. ...because therapy is expensive.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-cream transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-cream transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

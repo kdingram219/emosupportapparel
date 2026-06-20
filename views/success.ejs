@@ -1,0 +1,81 @@
+<!-- Success/Confirmation Page | Emotional Support Apparel by K&D -->
+
+<section class="py-16 sm:py-24 bg-[#F8F4EE] animate-fade-in flex-grow flex items-center">
+    <div class="max-w-xl mx-auto px-6 text-center space-y-8">
+        
+        <!-- Large Stitched Heart Checkmark Icon -->
+        <div class="relative w-24 h-24 mx-auto bg-gold/10 text-gold rounded-full flex items-center justify-center shadow-inner">
+            <svg class="w-12 h-12 fill-current" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                <path d="M9 11l3 3 5-5" stroke="#F8F4EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+            <!-- Pulse ring -->
+            <div class="absolute inset-0 rounded-full border-2 border-gold/30 animate-ping opacity-25"></div>
+        </div>
+
+        <div class="space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/15 px-4 py-1.5 rounded-full inline-block">Order Confirmed</span>
+            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal tracking-tight">Your Comfort is Secured.</h1>
+            <p class="font-serif text-lg text-charcoal/60 italic">"Validation not included. But shipping is."</p>
+        </div>
+
+        <!-- Receipt Card -->
+        <div class="bg-cream border border-charcoal/10 rounded-2xl p-6 text-left shadow-xl space-y-4 max-w-md mx-auto">
+            <div class="border-b border-charcoal/5 pb-4">
+                <div class="flex justify-between items-center text-xs text-charcoal/40 uppercase tracking-widest font-semibold">
+                    <span>Receipt Summary</span>
+                    <span class="text-gold">★ Registered</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-sm">
+                <!-- Item name -->
+                <div class="flex justify-between">
+                    <span class="text-charcoal/60">Product:</span>
+                    <span class="font-bold text-charcoal text-right max-w-[200px] truncate"><%= orderDetails.name %></span>
+                </div>
+                <!-- Size & Color -->
+                <div class="flex justify-between">
+                    <span class="text-charcoal/60">Specifications:</span>
+                    <span class="font-semibold text-charcoal text-right">Size <%= orderDetails.size %> · <%= orderDetails.color %></span>
+                </div>
+                
+                <!-- Custom text if any -->
+                <% if (orderDetails.customText) { %>
+                    <div class="bg-gold/5 border-l-2 border-gold p-3 rounded-r-md mt-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gold block">Your Printed Vibe</span>
+                        <p class="font-serif italic text-charcoal leading-relaxed">"<%= orderDetails.customText %>"</p>
+                    </div>
+                <% } %>
+
+                <!-- Price -->
+                <div class="border-t border-charcoal/5 pt-3 flex justify-between items-center text-base font-bold text-charcoal">
+                    <span>Amount Paid:</span>
+                    <span class="text-gold">$<%= orderDetails.price.toFixed(2) %></span>
+                </div>
+            </div>
+
+            <!-- Order ID -->
+            <div class="border-t border-charcoal/5 pt-3 flex flex-col space-y-1">
+                <span class="text-[9px] uppercase tracking-widest text-charcoal/30">Order / Checkout ID</span>
+                <span class="text-[11px] font-mono text-charcoal/50 select-all break-all"><%= orderDetails.orderId %></span>
+            </div>
+        </div>
+
+        <!-- Witty Message -->
+        <p class="text-charcoal/60 text-sm max-w-md mx-auto leading-relaxed">
+            Our screenprinting presses have been lubricated with real caffeine and tears of corporate exhaustion. Your customized comfort shield will be manufactured with absolute precision for our 2026 launch. Keep holding on.
+        </p>
+
+        <!-- CTAs -->
+        <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/" class="inline-flex items-center justify-center px-8 py-3 bg-charcoal hover:bg-charcoal/90 text-cream font-bold text-xs tracking-wider uppercase rounded-full shadow-md transition-all duration-300">
+                Back to Storefront
+            </a>
+            <a href="/design" class="inline-flex items-center justify-center px-8 py-3 border border-charcoal/15 hover:border-gold hover:bg-gold/10 text-charcoal font-semibold text-xs tracking-wider uppercase rounded-full transition-all duration-300">
+                Design Another Vibe
+            </a>
+        </div>
+
+    </div>
+</section>
