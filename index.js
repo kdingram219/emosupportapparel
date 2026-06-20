@@ -21,7 +21,12 @@ app.use(express.json());
 app.use((req, res, next) => {
     res.renderView = (view, data = {}) => {
         // Render child view first
-        app.render(view, { ...data, products }, (err, compiledBody) => {
+        app.render(view, { 
+            ...data, 
+            products,
+            paypalClientId: process.env.PAYPAL_CLIENT_ID || 'sb',
+            paypalBusinessEmail: process.env.PAYPAL_BUSINESS_EMAIL || 'kdjones219@gmail.com'
+        }, (err, compiledBody) => {
             if (err) {
                 console.error("View Render Error:", err);
                 return res.status(500).send(`Render Error: ${err.message}`);
@@ -206,7 +211,7 @@ app.post('/create-checkout-session', async (req, res) => {
 // Success Page Route
 app.get('/success', async (req, res) => {
     const sessionId = req.query.session_id;
-    const isMock = req.query.mock === 'true';
+    const isMock = req.query.mock === 'true' || req.query.paypal === 'true';
     
     let orderDetails = {
         orderId: sessionId || 'ESA-ORDER-MOCK',
@@ -253,6 +258,129 @@ app.get('/cancel', (req, res) => {
     res.renderView('cancel', {
         title: "Checkout Cancelled | Emotional Support Apparel"
     });
+});
+
+// --- PAYPAL CHECKOUT INTEGRATION ---
+
+// Helper: Fetch PayPal OAuth Access Token
+async function getPayPalAccessToken() {
+    const clientId = process.env.PAYPAL_CLIENT_ID;
+    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+    
+    if (!clientId || !clientSecret) {
+        return null;
+    }
+    
+    const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    const baseUrl = process.env.PAYPAL_MODE === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
+    
+    try {
+        const response = await fetch(`${baseUrl}/v1/oauth2/token`, {
+            method: 'POST',
+            body: 'grant_type=client_credentials',
+            headers: {
+                Authorization: `Basic ${auth}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+        
+        const data = await response.json();
+        return data.access_token;
+    } catch (err) {
+        console.error("PayPal Token Error:", err);
+        return null;
+    }
+}
+
+// 1. Create PayPal Order Route
+app.post('/create-paypal-order', async (req, res) => {
+    const { productId, name, price, size, color, customText, customImage, category } = req.body;
+    
+    const isMock = !process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET;
+    const lineItemName = name || (category ? `Custom ${category.toUpperCase()}` : "Custom ESA Creation");
+    const lineItemPrice = parseFloat(price) || 85.00;
+    
+    if (isMock) {
+        const mockOrderId = 'PAYPAL-MOCK-' + Math.random().toString(36).substring(2, 15).toUpperCase();
+        console.log("Mock PayPal Order created:", mockOrderId);
+        return res.json({ id: mockOrderId });
+    }
+    
+    try {
+        const accessToken = await getPayPalAccessToken();
+        if (!accessToken) {
+            throw new Error("Unable to retrieve PayPal Access Token.");
+        }
+        const baseUrl = process.env.PAYPAL_MODE === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
+        
+        const response = await fetch(`${baseUrl}/v2/checkout/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                intent: 'CAPTURE',
+                purchase_units: [
+                    {
+                        amount: {
+                            currency_code: 'USD',
+                            value: lineItemPrice.toFixed(2)
+                        },
+                        description: `Emotional Support Apparel by K&D - ${lineItemName} (Size: ${size || 'M'}, Color: ${color || 'Cream'}) ${customText ? `(Custom: "${customText}")` : ''}`,
+                        payee: {
+                            email_address: process.env.PAYPAL_BUSINESS_EMAIL || 'kdjones219@gmail.com'
+                        }
+                    }
+                ],
+                application_context: {
+                    brand_name: 'Emotional Support Apparel by K&D',
+                    shipping_preference: 'NO_SHIPPING',
+                    user_action: 'PAY_NOW'
+                }
+            })
+        });
+        
+        const order = await response.json();
+        res.json({ id: order.id });
+    } catch (err) {
+        console.error("PayPal Create Order Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 2. Capture PayPal Order Route
+app.post('/capture-paypal-order', async (req, res) => {
+    const { orderId } = req.body;
+    
+    const isMock = !process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET;
+    
+    if (isMock) {
+        console.log("Mock PayPal Order captured:", orderId);
+        return res.json({ status: 'COMPLETED' });
+    }
+    
+    try {
+        const accessToken = await getPayPalAccessToken();
+        if (!accessToken) {
+            throw new Error("Unable to retrieve PayPal Access Token.");
+        }
+        const baseUrl = process.env.PAYPAL_MODE === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
+        
+        const response = await fetch(`${baseUrl}/v2/checkout/orders/${orderId}/capture`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        
+        const capture = await response.json();
+        res.json(capture);
+    } catch (err) {
+        console.error("PayPal Capture Order Error:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // 404 Fallback

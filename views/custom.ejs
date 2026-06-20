@@ -161,6 +161,19 @@
                         <span class="font-bold text-gold" id="dynamic-price">$85.00</span>
                     </div>
 
+                    <!-- Payment Method Selector -->
+                    <div class="space-y-3 pt-2">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Select Payment Method</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="pay-stripe-tab" onclick="switchPaymentMethod('stripe')" class="py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all">
+                                <span>💳 Credit Card</span>
+                            </button>
+                            <button id="pay-paypal-tab" onclick="switchPaymentMethod('paypal')" class="py-3 px-4 border border-charcoal/10 text-charcoal/60 hover:border-charcoal/30 font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all">
+                                <span>🅿️ PayPal</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <button id="custom-checkout-btn" onclick="submitCustomOrder()" class="w-full flex items-center justify-center px-8 py-4 bg-charcoal hover:bg-charcoal/90 text-cream font-bold tracking-widest uppercase text-xs rounded-full shadow-lg hover:shadow-charcoal/15 hover:-translate-y-0.5 transition-all duration-300">
                         <span id="custom-btn-text">Order Custom Creation</span>
                         <svg id="custom-btn-spinner" class="hidden animate-spin ml-2 h-4 w-4 text-cream" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -168,6 +181,9 @@
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     </button>
+
+                    <!-- PayPal Smart Payment Buttons Container -->
+                    <div id="paypal-button-container" class="hidden flex-grow relative z-10 min-w-[200px]"></div>
 
                     <p class="text-[10px] text-charcoal/40 text-center uppercase tracking-wider">
                         🛠️ Free shipping on orders $65+ · Direct Dye Sublimation · Stitched to Order
@@ -589,6 +605,155 @@
             spinner.classList.add('hidden');
         }
     }
+
+    // --- PAYPAL CHECKOUT INTEGRATION ---
+    let paypalButtonsRendered = false;
+
+    function switchPaymentMethod(method) {
+        const stripeBtn = document.getElementById('custom-checkout-btn');
+        const paypalBtnContainer = document.getElementById('paypal-button-container');
+        const stripeTab = document.getElementById('pay-stripe-tab');
+        const paypalTab = document.getElementById('pay-paypal-tab');
+
+        if (method === 'stripe') {
+            stripeBtn.classList.remove('hidden');
+            paypalBtnContainer.classList.add('hidden');
+            
+            stripeTab.className = "py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
+            paypalTab.className = "py-3 px-4 border border-charcoal/10 text-charcoal/60 hover:border-charcoal/30 font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
+        } else if (method === 'paypal') {
+            stripeBtn.classList.add('hidden');
+            paypalBtnContainer.classList.remove('hidden');
+            
+            paypalTab.className = "py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
+            stripeTab.className = "py-3 px-4 border border-charcoal/10 text-charcoal/60 hover:border-charcoal/30 font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
+
+            if (!paypalButtonsRendered) {
+                renderPayPalButtons();
+            }
+        }
+    }
+
+    function renderPayPalButtons() {
+        if (typeof paypal === 'undefined') {
+            console.error("PayPal SDK not loaded.");
+            return;
+        }
+
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color:  'gold',
+                shape:  'rect',
+                label:  'paypal',
+                height: 48
+            },
+            createOrder: function(data, actions) {
+                const selectEl = document.getElementById('canvas-select');
+                const itemName = selectEl.options[selectEl.selectedIndex].text.split(' (')[0];
+                const categoryId = selectEl.value;
+                
+                let colorName = "Cream";
+                if (selectedColor === '#2B2B2B') colorName = "Charcoal";
+                if (selectedColor === '#A8B5A2') colorName = "Sage Green";
+                if (selectedColor === '#8FA9C7') colorName = "Dusty Blue";
+
+                let finalPrice = currentBasePrice;
+                if (hasCustomText) finalPrice += 5.00;
+                if (hasCustomImage) finalPrice += 8.00;
+
+                const imgEl = document.getElementById('sublimation-user-image');
+                const customImageSrc = hasCustomImage ? imgEl.src : '';
+
+                return fetch('/create-paypal-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productId: 'custom-sublimation-' + categoryId,
+                        name: `Customized ESA ${itemName}`,
+                        price: finalPrice,
+                        size: selectedSize,
+                        color: colorName,
+                        customText: selectedText,
+                        customImage: customImageSrc,
+                        category: categoryId
+                    })
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Failed to create order on server.");
+                    }
+                    return res.json();
+                })
+                .then(order => order.id)
+                .catch(err => {
+                    console.error("PayPal Create Order Error:", err);
+                    alert("A minor inconvenience occurred: " + err.message);
+                });
+            },
+            onApprove: function(data, actions) {
+                const selectEl = document.getElementById('canvas-select');
+                const itemName = selectEl.options[selectEl.selectedIndex].text.split(' (')[0];
+                const categoryId = selectEl.value;
+                
+                let colorName = "Cream";
+                if (selectedColor === '#2B2B2B') colorName = "Charcoal";
+                if (selectedColor === '#A8B5A2') colorName = "Sage Green";
+                if (selectedColor === '#8FA9C7') colorName = "Dusty Blue";
+
+                let finalPrice = currentBasePrice;
+                if (hasCustomText) finalPrice += 5.00;
+                if (hasCustomImage) finalPrice += 8.00;
+
+                return fetch('/capture-paypal-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: data.orderID,
+                        productId: 'custom-sublimation-' + categoryId,
+                        name: `Customized ESA ${itemName}`,
+                        price: finalPrice,
+                        size: selectedSize,
+                        color: colorName,
+                        customText: selectedText,
+                        category: categoryId
+                    })
+                })
+                .then(res => res.json())
+                .then(details => {
+                    const queryParams = new URLSearchParams({
+                        session_id: data.orderID,
+                        productId: 'custom-sublimation-' + categoryId,
+                        name: `Customized ESA ${itemName}`,
+                        price: finalPrice,
+                        size: selectedSize,
+                        color: colorName,
+                        customText: selectedText,
+                        paypal: 'true'
+                    }).toString();
+                    window.location.href = `/success?${queryParams}`;
+                })
+                .catch(err => {
+                    console.error("PayPal Capture Order Error:", err);
+                    alert("Unable to capture payment. Please contact support.");
+                });
+            },
+            onError: function(err) {
+                console.error("PayPal Error Callback:", err);
+                alert("An error occurred with PayPal checkout. Please try again.");
+            }
+        }).render('#paypal-button-container');
+
+        paypalButtonsRendered = true;
+    }
+</script>
+
+<!-- PayPal JS SDK Script -->
+<script src="https://www.paypal.com/sdk/js?client-id=<%= paypalClientId %>&currency=USD"></script>
 
     function closeModal() {
         const modal = document.getElementById('success-modal');
