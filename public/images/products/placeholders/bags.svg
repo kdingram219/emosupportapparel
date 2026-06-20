@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Tote bag body -->
+    <path d="M50,80 L60,200 C60,205 65,210 70,210 L170,210 C175,210 180,205 190,200 L200,80 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Handles -->
+    <path d="M90,80 L90,40 C90,35 100,30 120,30 C140,30 150,35 150,40 L150,80" stroke-linecap="round"/>
+    <path d="M100,80 L100,45 C100,42 105,40 120,40 C135,40 140,42 140,45 L140,80" stroke-linecap="round" stroke-opacity="0.4"/>
+</svg>

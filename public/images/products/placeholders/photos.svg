@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Picture frame -->
+    <rect x="40" y="40" width="160" height="160" rx="4" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Photo landscape silhouette inside -->
+    <rect x="55" y="55" width="130" height="110" rx="2" fill="#2B2B2B" fill-opacity="0.05" stroke-linejoin="round"/>
+    <path d="M55,140 L90,105 L125,140 L150,115 L185,150" stroke-linejoin="round"/>
+    <circle cx="150" cy="80" r="10" fill="#2B2B2B" fill-opacity="0.1"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Tee outline -->
+    <path d="M40,75 L75,55 L90,70 C100,60 110,58 120,58 C130,58 140,60 150,70 L165,55 L200,75 L185,110 L170,105 L170,200 C170,205 165,210 160,210 L80,210 C75,210 70,205 70,200 L70,105 L55,110 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Collar hem -->
+    <path d="M90,70 C100,82 140,82 150,70" stroke-linecap="round"/>
+</svg>

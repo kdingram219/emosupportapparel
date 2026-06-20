@@ -111,44 +111,10 @@
                     <div class="aspect-square bg-cream/40 border-b border-charcoal/5 relative flex items-center justify-center p-8 group-hover:bg-cream/20 transition-all duration-300">
                         <!-- Custom Product Outline SVG representation -->
                         <div class="w-full h-full flex items-center justify-center text-charcoal/60 group-hover:text-charcoal transition-colors duration-300">
-                            <% if (product.category === 'hoodies') { %>
-                                <svg class="w-40 h-40" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <path d="M40,90 C30,110 20,150 25,180 C27,190 35,190 40,180 L55,140" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M200,90 C210,110 220,150 215,180 C213,190 205,190 200,180 L185,140" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M60,90 L60,195 C60,205 70,210 120,210 C170,210 180,205 180,195 L180,90 Z" fill="currentColor" fill-opacity="0.02" stroke-linejoin="round"/>
-                                    <path d="M80,90 C80,60 100,35 120,35 C140,35 160,60 160,90 C160,70 145,55 120,55 C95,55 80,70 80,90" fill="currentColor" fill-opacity="0.05" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M85,150 L155,150 L165,185 C165,190 160,195 155,195 L85,195 Z" fill="currentColor" fill-opacity="0.04"/>
-                                </svg>
-                            <% } else if (product.category === 'bags') { %>
-                                <svg class="w-40 h-40" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <!-- Tote bag body -->
-                                    <path d="M50,80 L60,200 C60,205 65,210 70,210 L170,210 C175,210 180,205 190,200 L200,80 Z" fill="currentColor" fill-opacity="0.02" stroke-linejoin="round"/>
-                                    <!-- Handles -->
-                                    <path d="M90,80 L90,40 C90,35 100,30 120,30 C140,30 150,35 150,40 L150,80" stroke-linecap="round"/>
-                                    <path d="M100,80 L100,45 C100,42 105,40 120,40 C135,40 140,42 140,45 L140,80" stroke-linecap="round" stroke-opacity="0.4"/>
-                                </svg>
-                            <% } else if (product.category === 'tees') { %>
-                                <svg class="w-40 h-40" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <!-- Tee outline -->
-                                    <path d="M40,75 L75,55 L90,70 C100,60 110,58 120,58 C130,58 140,60 150,70 L165,55 L200,75 L185,110 L170,105 L170,200 C170,205 165,210 160,210 L80,210 C75,210 70,205 70,200 L70,105 L55,110 Z" fill="currentColor" fill-opacity="0.02" stroke-linejoin="round"/>
-                                    <!-- Collar hem -->
-                                    <path d="M90,70 C100,82 140,82 150,70" stroke-linecap="round"/>
-                                </svg>
-                            <% } else if (product.category === 'pillows') { %>
-                                <svg class="w-40 h-40" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <!-- Soft pillow square -->
-                                    <path d="M45,45 C95,35 145,35 195,45 C205,95 205,145 195,195 C145,205 95,205 45,195 C35,145 35,95 45,45 Z" fill="currentColor" fill-opacity="0.02" stroke-linejoin="round"/>
-                                    <!-- Pillow corner tuffs -->
-                                    <path d="M45,45 L38,38 M195,45 L202,38 M195,195 L202,202 M45,195 L38,202" stroke-linecap="round"/>
-                                </svg>
-                            <% } else { %>
-                                <svg class="w-40 h-40" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <!-- General tumbler/mug shape -->
-                                    <path d="M65,50 L175,50 L160,195 C160,202 155,205 145,205 L95,205 C85,205 80,202 80,195 Z" fill="currentColor" fill-opacity="0.02" stroke-linejoin="round"/>
-                                    <path d="M60,50 L180,50" stroke-linecap="round"/>
-                                    <path d="M65,70 L175,70" stroke-opacity="0.4"/>
-                                </svg>
-                            <% } %>
+                            <img src="/images/products/<%= product.id %>.png" 
+                                 onerror="handleProductImageError(this, '<%= product.id %>', '<%= product.category %>')" 
+                                 alt="<%= product.name %>" 
+                                 class="w-40 h-40 object-contain transition-transform duration-500 group-hover:scale-105" />
                         </div>
                         
                         <!-- Custom Badge overlay -->

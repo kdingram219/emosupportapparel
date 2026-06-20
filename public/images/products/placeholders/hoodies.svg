@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Sleeves -->
+    <path d="M40,90 C30,110 20,150 25,180 C27,190 35,190 40,180 L55,140" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M200,90 C210,110 220,150 215,180 C213,190 205,190 200,180 L185,140" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Body core -->
+    <path d="M60,90 L60,195 C60,205 70,210 120,210 C170,210 180,205 180,195 L180,90 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Hood -->
+    <path d="M80,90 C80,60 100,35 120,35 C140,35 160,60 160,90 C160,70 145,55 120,55 C95,55 80,70 80,90" fill="#2B2B2B" fill-opacity="0.05" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Pocket -->
+    <path d="M85,150 L155,150 L165,185 C165,190 160,195 155,195 L85,195 Z" fill="#2B2B2B" fill-opacity="0.04"/>
+    <!-- Drawstrings -->
+    <path d="M110,92 L110,120" stroke-linecap="round"/>
+    <path d="M130,92 L130,128" stroke-linecap="round"/>
+</svg>

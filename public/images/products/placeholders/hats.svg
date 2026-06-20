@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Baseball cap cap dome -->
+    <path d="M50,150 C50,70 190,70 190,150 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Brim -->
+    <path d="M30,150 C50,140 190,140 210,150 C220,155 200,165 120,165 C40,165 20,155 30,150 Z" fill="#2B2B2B" fill-opacity="0.06" stroke-linejoin="round"/>
+    <!-- Seams -->
+    <path d="M120,150 L120,85 M85,145 C85,110 110,95 120,95" stroke-dasharray="2,2"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <!-- Soft pillow square -->
+    <path d="M45,45 C95,35 145,35 195,45 C205,95 205,145 195,195 C145,205 95,205 45,195 C35,145 35,95 45,45 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <!-- Pillow corner tuffs -->
+    <path d="M45,45 L38,38 M195,45 L202,38 M195,195 L202,202 M45,195 L38,202" stroke-linecap="round"/>
+</svg>

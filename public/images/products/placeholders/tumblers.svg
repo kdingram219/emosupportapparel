@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#2B2B2B" stroke-width="1.2">
+    <path d="M70,60 L170,60 L155,195 C155,202 150,205 140,205 L100,205 C90,205 85,202 85,195 Z" fill="#2B2B2B" fill-opacity="0.03" stroke-linejoin="round"/>
+    <path d="M65,60 L175,60" stroke-linecap="round" stroke-width="2"/>
+    <!-- Straw -->
+    <path d="M120,60 L120,25 C120,22 125,20 135,20" stroke-linecap="round" stroke-width="1.5"/>
+</svg>

@@ -24,6 +24,25 @@
                 }
             }
         }
+
+        // Global product image error handler to cascade fallbacks gracefully
+        function handleProductImageError(img, productId, category) {
+            if (!img.dataset.attempt) {
+                img.dataset.attempt = 'jpg';
+                img.src = '/images/products/' + productId + '.jpg';
+            } else if (img.dataset.attempt === 'jpg') {
+                img.dataset.attempt = 'jpeg';
+                img.src = '/images/products/' + productId + '.jpeg';
+            } else if (img.dataset.attempt === 'jpeg') {
+                img.dataset.attempt = 'placeholder';
+                img.src = '/images/products/placeholders/' + category + '.svg';
+            } else if (img.dataset.attempt === 'placeholder') {
+                img.dataset.attempt = 'default';
+                img.src = '/images/products/placeholders/default.svg';
+            } else {
+                img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            }
+        }
     </script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
