@@ -47,8 +47,8 @@
     </div>
 </section>
 
-<!-- Product List Grid -->
-<section class="py-16 sm:py-24 bg-[#F8F4EE]">
+<!-- Product List Grid — with always-visible witty tags -->
+<section class="py-16 sm:py-24 bg-cream">
     <div class="max-w-7xl mx-auto px-6">
         
         <% if (filteredProducts.length === 0) { %>
@@ -68,14 +68,16 @@
                 <% filteredProducts.forEach(product => { %>
                     <div class="group bg-cream border border-charcoal/10 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
                         
-                        <!-- Product representation -->
-                        <div class="aspect-square bg-cream/40 border-b border-charcoal/5 relative flex items-center justify-center p-8 group-hover:bg-cream/20 transition-all duration-300">
-                            <!-- Product representation image -->
-                            <div class="w-full h-full flex items-center justify-center text-charcoal/60 group-hover:text-charcoal transition-colors duration-300">
-                                <img src="/images/products/<%= product.id %>.png" 
-                                     onerror="handleProductImageError(this, '<%= product.id %>', '<%= product.category %>')" 
-                                     alt="<%= product.name %>" 
-                                     class="w-44 h-44 object-contain transition-transform duration-500 group-hover:scale-105" />
+                        <!-- Design/Graphic area — text design as the product graphic -->
+                        <div class="aspect-square bg-charcoal/5 relative flex items-center justify-center p-6 group-hover:bg-charcoal/10 transition-all duration-300 border-b border-charcoal/5">
+                            <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                                <% if (product.designText) { %>
+                                    <span class="font-serif text-sm font-bold text-charcoal tracking-tight leading-tight uppercase whitespace-pre-line">
+                                        <%= product.designText %>
+                                    </span>
+                                <% } else { %>
+                                    <span class="font-serif text-sm text-charcoal/50 italic"><%= product.name %></span>
+                                <% } %>
                             </div>
 
                             <% if (product.badge) { %>
@@ -83,29 +85,24 @@
                                     <%= product.badge %>
                                 </span>
                             <% } %>
-                            
-                            <!-- Custom Witty Tag Overlay on Hover -->
-                            <div class="absolute inset-0 bg-charcoal/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-center items-center text-center">
-                                <p class="text-gold font-serif italic text-base leading-relaxed mb-4">
-                                    "<%= product.wittyTag %>"
-                                </p>
-                                <span class="text-[10px] uppercase tracking-widest text-cream/50">Read Witty Tag</span>
-                            </div>
                         </div>
 
-                        <!-- Card Meta -->
-                        <div class="p-6 flex flex-col flex-grow justify-between bg-cream border-t border-charcoal/5">
+                        <!-- Card Meta — witty tag RIGHT HERE, always visible -->
+                        <div class="p-6 flex flex-col flex-grow justify-between bg-cream">
                             <div class="space-y-2">
                                 <span class="text-[10px] uppercase tracking-widest font-bold text-gold"><%= product.category %></span>
                                 <h3 class="font-serif text-xl font-bold text-charcoal group-hover:text-gold transition-colors duration-200">
                                     <a href="/products/<%= product.id %>"><%= product.name %></a>
                                 </h3>
-                                <p class="text-charcoal/50 text-xs line-clamp-2 leading-relaxed"><%= product.description %></p>
+                                <!-- WITTY TAG always visible -->
+                                <p class="font-serif italic text-xs text-gold/80 leading-relaxed">
+                                    "<%= product.wittyTag %>"
+                                </p>
                             </div>
                             <div class="flex items-center justify-between pt-6 mt-auto border-t border-charcoal/5">
                                 <span class="text-charcoal font-bold text-lg">$<%= product.price.toFixed(2) %></span>
                                 <a href="/products/<%= product.id %>" class="text-xs tracking-wider uppercase font-semibold text-charcoal group-hover:text-gold flex items-center space-x-1 transition-all">
-                                    <span>Examine</span>
+                                    <span>Details</span>
                                     <svg class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
                             </div>

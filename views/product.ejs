@@ -1,4 +1,4 @@
-<!-- Product Detail Page of Emotional Support Apparel by K&D -->
+<!-- Product Detail Page — Interactive Color/Size Preview Like CustomInk/Amazon -->
 
 <!-- Breadcrumb -->
 <div class="bg-cream border-b border-charcoal/5 py-4">
@@ -13,53 +13,71 @@
     </div>
 </div>
 
-<!-- Product Showcase & Details Section -->
-<section class="py-12 sm:py-20 bg-[#F8F4EE]">
+<!-- Product Showcase & Interactive Configurator -->
+<section class="py-12 sm:py-20 bg-cream">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         
-        <!-- Left: Beautiful Product Visual/Mockup -->
+        <!-- LEFT: Interactive Design Preview — Like CustomInk -->
         <div class="lg:col-span-6 flex flex-col space-y-6">
-            <div class="relative aspect-square bg-cream border border-charcoal/10 rounded-2xl flex items-center justify-center p-12 shadow-md overflow-hidden">
+            <!-- The DESIGN/GRAPHIC at center — witty text as mock design on the garment -->
+            <div class="relative aspect-square bg-cream border border-charcoal/10 rounded-2xl flex items-center justify-center p-6 sm:p-8 shadow-md overflow-hidden group" id="product-preview">
                 
+                <!-- This is the "garment" — color changes when user selects a swatch -->
+                <div id="garment-swatch" class="absolute inset-0 transition-colors duration-500" style="background-color: #1A1A1A;"></div>
+                
+                <!-- Subtle fabric texture overlay -->
+                <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMCA0TDQgMFoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3N2Zz4=');"></div>
+                
+                <!-- The printed design overlay -->
+                <div class="relative z-10 flex flex-col items-center justify-center text-center p-8 max-w-xs">
+                    <!-- Design text rendered right on the garment -->
+                    <div id="design-text-container" class="transition-colors duration-300">
+                        <% if (product.designText) { %>
+                            <span id="design-text" class="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-tight leading-tight uppercase whitespace-pre-line" style="color: #FFFFFF;">
+                                <%= product.designText %>
+                            </span>
+                        <% } else { %>
+                            <span class="font-serif text-xl text-white/80 italic"><%= product.name %></span>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Tiny gold accent line -->
+                    <div id="design-accent" class="w-12 h-0.5 bg-gold/50 my-3 transition-opacity duration-300"></div>
+                    
+                    <!-- Brand subtitle -->
+                    <span id="design-subtitle" class="font-sans text-[10px] tracking-widest uppercase" style="color: #C6A96B;">
+                        Emotional Support Apparel
+                    </span>
+                </div>
+                
+                <!-- Badge overlay -->
                 <% if (product.badge) { %>
-                    <span class="absolute top-4 left-4 bg-charcoal text-cream text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded shadow-md">
+                    <span class="absolute top-4 left-4 z-20 bg-charcoal/80 text-cream text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded shadow-md backdrop-blur-sm">
                         <%= product.badge %>
                     </span>
                 <% } %>
-
-                <span class="absolute top-4 right-4 text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full uppercase tracking-wider">
-                    Luxury Grade
-                </span>
-
-                <!-- Stylized CSS/SVG Product Representation -->
-                <div class="w-full h-full max-w-sm flex items-center justify-center text-charcoal">
-                    <img src="/images/products/<%= product.id %>.png" 
-                         data-attempt="jpg"
-                         onerror="handleProductImageError(this, '<%= product.id %>', '<%= product.category %>')" 
-                         alt="<%= product.name %>" 
-                         class="w-72 h-72 object-contain transition-transform duration-500 hover:scale-105" />
-                </div>
-
-                <!-- Sublimation Placement lines indicator -->
-                <div class="absolute inset-0 border border-gold/15 m-8 pointer-events-none rounded flex items-center justify-center">
-                    <span class="text-[9px] uppercase tracking-widest text-gold/30 font-bold bg-cream px-2">Sublimation Zone</span>
-                </div>
             </div>
 
-            <!-- Double-path info note -->
+            <!-- Color Name Display -->
+            <div class="text-center">
+                <span class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Selected Color: </span>
+                <span id="selected-color-name" class="text-sm font-semibold text-charcoal">Black</span>
+            </div>
+
+            <!-- Double-path info -->
             <p class="text-xs text-charcoal/40 text-center italic">
-                * Note: Outline represents high-end structure. Finished printed item matches luxury specifications.
+                * Design preview shown. Actual placement and sizing may vary slightly by garment size.
             </p>
         </div>
         
-        <!-- Right: Sophisticated Details -->
+        <!-- RIGHT: Product Details + Configurator -->
         <div class="lg:col-span-6 space-y-8">
             
             <div class="space-y-4">
                 <span class="text-xs font-bold uppercase tracking-widest text-gold">Branded Collection Drop</span>
                 <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight"><%= product.name %></h1>
                 
-                <!-- Review star layout -->
+                <!-- Star rating -->
                 <div class="flex items-center space-x-3">
                     <div class="flex text-gold space-x-0.5">
                         <% for (let i = 0; i < 5; i++) { %>
@@ -71,6 +89,7 @@
                     <span class="text-xs text-charcoal/50 uppercase tracking-widest">(★★★★★ 48 Reviews)</span>
                 </div>
 
+                <!-- Price + Free Shipping -->
                 <div class="flex items-center space-x-4">
                     <p class="text-2xl font-bold text-charcoal">$<%= product.price.toFixed(2) %></p>
                     <% if (product.price >= 65) { %>
@@ -85,9 +104,9 @@
                 </div>
             </div>
 
-            <!-- Witty Tag block -->
+            <!-- Witty Tag block — always visible -->
             <div class="bg-gold/10 border-l-2 border-gold p-5 rounded-r-lg">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-gold block mb-1">Comfort Slogan / Witty Tag</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gold block mb-1">Witty Tagline</span>
                 <p class="font-serif italic text-lg text-charcoal/80 leading-relaxed">
                     "<%= product.wittyTag %>"
                 </p>
@@ -95,11 +114,11 @@
 
             <!-- Description -->
             <div class="space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Detailed Breakdown</h3>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Details</h3>
                 <p class="text-charcoal/70 text-sm leading-relaxed"><%= product.description %></p>
             </div>
 
-            <!-- Specs list -->
+            <!-- Features -->
             <% if (product.features && product.features.length > 0) { %>
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Specifications</h3>
@@ -114,36 +133,56 @@
                 </div>
             <% } %>
 
-            <!-- Interactive color selector -->
+            <!-- COLOR SWATCHES — 11 shirt colors like Amazon/CustomInk -->
             <div class="space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Select Colorway</h3>
-                <div class="flex items-center space-x-3">
-                    <button onclick="selectColor(this, 'Charcoal')" class="w-8 h-8 rounded-full border-2 border-charcoal bg-charcoal shadow-sm ring-2 ring-gold ring-offset-2" aria-label="Charcoal color"></button>
-                    <button onclick="selectColor(this, 'Cream')" class="w-8 h-8 rounded-full border border-charcoal/20 bg-cream hover:border-charcoal shadow-sm" aria-label="Cream color"></button>
-                    <button onclick="selectColor(this, 'Sage Green')" class="w-8 h-8 rounded-full border border-charcoal/20 bg-[#A8B5A2] hover:border-charcoal shadow-sm" aria-label="Sage Green color"></button>
-                    <button onclick="selectColor(this, 'Dusty Blue')" class="w-8 h-8 rounded-full border border-charcoal/20 bg-[#8FA9C7] hover:border-charcoal shadow-sm" aria-label="Dusty Blue color"></button>
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Color: <span id="color-label" class="text-charcoal font-sans">Black</span></h3>
+                </div>
+                <div class="flex flex-wrap gap-2" id="color-swatches">
+                    <% const colorMap = {
+                        "Black": "#1A1A1A",
+                        "White": "#F5F5F5",
+                        "Heather Gray": "#BEBEBE",
+                        "Navy": "#1B2A4A",
+                        "Charcoal": "#36454F",
+                        "Light Pink": "#FFD1DC",
+                        "Light Blue": "#ADD8E6",
+                        "Sage Green": "#A8B5A2",
+                        "Burgundy": "#800020",
+                        "Purple": "#6A0DAD",
+                        "Royal Blue": "#4169E1"
+                    }; %>
+                    <% Object.entries(colorMap).forEach(([name, hex], index) => { %>
+                        <button onclick="selectShirtColor('<%= name %>', '<%= hex %>', this)" 
+                                class="color-swatch w-9 h-9 rounded-full border-2 transition-all duration-200 hover:scale-110 <%= index === 0 ? 'ring-2 ring-gold ring-offset-2' : 'border-charcoal/20 hover:border-charcoal' %>" 
+                                style="background-color: <%= hex %>;" 
+                                title="<%= name %>"
+                                aria-label="<%= name %> color">
+                        </button>
+                    <% }); %>
                 </div>
             </div>
 
-            <!-- Interactive size selector -->
+            <!-- SIZE SELECTOR — XS to 3XL -->
             <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Select Size</h3>
-                    <button onclick="alert('Sizing Guide:\n- Heavyweight pieces are relaxed oversized fits.\n- Standard accessories are one-size fits all.')" class="text-xs text-gold underline hover:text-gold/80">Sizing Guide</button>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Size: <span id="size-label" class="text-charcoal font-sans">M</span></h3>
+                    <button onclick="alert('Sizing Guide:\n\nXS (0-2)\nS (4-6)\nM (8-10)\nL (12-14)\nXL (16-18)\n2XL (20-22)\n3XL (24-26)\n\nAll styles are relaxed/oversized fit.')" class="text-xs text-gold underline hover:text-gold/80">Sizing Guide</button>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <% const sizes = ["XS", "S", "M", "L", "XL", "XXL"]; %>
-                    <% sizes.forEach(size => { %>
-                        <button onclick="selectSize(this)" class="px-4 py-2 border <%= size === 'M' ? 'bg-charcoal text-cream border-charcoal' : 'border-charcoal/10 text-charcoal' %> hover:border-charcoal rounded text-xs font-semibold tracking-wider transition-all duration-200">
+                <div class="flex flex-wrap gap-2" id="size-buttons">
+                    <% const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"]; %>
+                    <% sizes.forEach((size, index) => { %>
+                        <button onclick="selectSize('<%= size %>', this)" 
+                                class="size-btn px-5 py-2.5 border rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 hover:border-charcoal <%= size === 'M' ? 'bg-charcoal text-cream border-charcoal' : 'bg-cream text-charcoal/70 border-charcoal/20 hover:bg-charcoal/5' %>">
                             <%= size %>
                         </button>
                     <% }); %>
                 </div>
             </div>
 
-            <!-- Payment Method Selector -->
-            <div class="space-y-3 pt-2">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-charcoal/50">Select Payment Method</h3>
+            <!-- Payment + Add to Cart -->
+            <div class="space-y-4 pt-4 border-t border-charcoal/5">
+                <!-- Payment Method Tabs -->
                 <div class="grid grid-cols-2 gap-4">
                     <button id="pay-stripe-tab" onclick="switchPaymentMethod('stripe')" class="py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all">
                         <span>💳 Credit Card</span>
@@ -152,68 +191,111 @@
                         <span>🅿️ PayPal</span>
                     </button>
                 </div>
-            </div>
 
-            <!-- Action buttons: Dual-path checkout & customize -->
-            <div class="space-y-4 pt-4 border-t border-charcoal/5">
+                <!-- Purchase Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <!-- Standard Cart / Buy Now with Stripe -->
-                    <button id="checkout-btn" onclick="initiateStripeCheckout()" class="flex-grow flex items-center justify-center px-8 py-4 bg-charcoal hover:bg-charcoal/90 text-cream font-bold tracking-wider uppercase text-xs rounded-full shadow-lg transition-all">
-                        <span id="btn-text">Secure Comfort Now (Stripe)</span>
+                    <!-- Stripe Buy Button -->
+                    <button id="checkout-btn" onclick="initiateStripeCheckout()" class="flex-grow flex items-center justify-center px-8 py-4 bg-charcoal hover:bg-charcoal/90 text-cream font-bold tracking-wider uppercase text-sm rounded-full shadow-lg transition-all">
+                        <span id="btn-text">Add to Cart — $<%= product.price.toFixed(2) %></span>
                         <svg id="btn-spinner" class="hidden animate-spin ml-2 h-4 w-4 text-cream" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     </button>
                     
-                    <!-- PayPal Smart Payment Buttons Container -->
+                    <!-- PayPal Button Container -->
                     <div id="paypal-button-container" class="hidden flex-grow relative z-10 min-w-[200px]"></div>
                     
-                    <!-- Sublimation customization path -->
+                    <!-- Custom Sublimation Path -->
                     <% if (product.customizable) { %>
-                        <a href="/design?product=<%= product.category %>" class="flex-grow flex items-center justify-center px-8 py-4 border border-gold hover:bg-gold hover:text-charcoal text-charcoal font-bold tracking-wider uppercase text-xs rounded-full transition-all">
+                        <a href="/design?product=<%= product.category %>" class="flex items-center justify-center px-6 py-4 border border-gold hover:bg-gold hover:text-charcoal text-charcoal font-bold tracking-wider uppercase text-xs rounded-full transition-all">
                             Customize (Live Preview)
                         </a>
                     <% } %>
                 </div>
 
                 <p class="text-[10px] text-charcoal/40 text-center uppercase tracking-wider">
-                    ⚡ Free shipping on orders $65+ · Free processing on luxury pre-orders · Shipping in 2026
+                    ⚡ Free shipping on orders $65+ · Premium quality · Ships 2026
                 </p>
             </div>
-
         </div>
     </div>
 </section>
 
 <script>
+    // ===== STATE =====
     let selectedSize = 'M';
-    let selectedColor = 'Charcoal';
-
-    function selectSize(btn) {
-        // Remove active styling from siblings
-        btn.parentNode.querySelectorAll('button').forEach(b => {
-            b.classList.remove('bg-charcoal', 'text-cream', 'border-charcoal');
-            b.classList.add('border-charcoal/10', 'text-charcoal');
-        });
-        // Add active style to selected
-        btn.classList.add('bg-charcoal', 'text-cream', 'border-charcoal');
-        btn.classList.remove('border-charcoal/10', 'text-charcoal');
+    let selectedColorName = 'Black';
+    let selectedColorHex = '#1A1A1A';
+    let hasColors = true;
+    
+    // ===== COLOR CONFIGURATION =====
+    const colorConfig = {
+        "Black": { hex: "#1A1A1A", textLight: true },
+        "White": { hex: "#F5F5F5", textLight: false },
+        "Heather Gray": { hex: "#BEBEBE", textLight: false },
+        "Navy": { hex: "#1B2A4A", textLight: true },
+        "Charcoal": { hex: "#36454F", textLight: true },
+        "Light Pink": { hex: "#FFD1DC", textLight: false },
+        "Light Blue": { hex: "#ADD8E6", textLight: false },
+        "Sage Green": { hex: "#A8B5A2", textLight: false },
+        "Burgundy": { hex: "#800020", textLight: true },
+        "Purple": { hex: "#6A0DAD", textLight: true },
+        "Royal Blue": { hex: "#4169E1", textLight: true }
+    };
+    
+    // ===== COLOR SELECTION — updates the live preview =====
+    function selectShirtColor(colorName, colorHex, btn) {
+        // Update state
+        selectedColorName = colorName;
+        selectedColorHex = colorHex;
         
-        selectedSize = btn.innerText.trim();
-    }
-
-    function selectColor(btn, colorName) {
-        // Remove offset/ring class from all color button siblings
-        btn.parentNode.querySelectorAll('button').forEach(b => {
+        // Update garment preview background
+        const garment = document.getElementById('garment-swatch');
+        if (garment) {
+            garment.style.backgroundColor = colorHex;
+        }
+        
+        // Update design text color based on shirt brightness
+        const config = colorConfig[colorName] || { textLight: false };
+        const designText = document.getElementById('design-text');
+        const designSubtitle = document.getElementById('design-subtitle');
+        const designAccent = document.getElementById('design-accent');
+        
+        if (designText) {
+            designText.style.color = config.textLight ? '#FFFFFF' : '#2B2B2B';
+        }
+        if (designSubtitle) {
+            designSubtitle.style.color = config.textLight ? '#C6A96B' : '#C6A96B';
+        }
+        
+        // Update color name labels
+        document.getElementById('selected-color-name').textContent = colorName;
+        document.getElementById('color-label').textContent = colorName;
+        
+        // Update swatch ring indicators
+        document.querySelectorAll('.color-swatch').forEach(b => {
             b.classList.remove('ring-2', 'ring-gold', 'ring-offset-2');
+            b.classList.add('border-charcoal/20');
         });
-        // Add ring highlight to selected color
         btn.classList.add('ring-2', 'ring-gold', 'ring-offset-2');
-        
-        selectedColor = colorName;
+        btn.classList.remove('border-charcoal/20');
     }
-
+    
+    // ===== SIZE SELECTION =====
+    function selectSize(size, btn) {
+        selectedSize = size;
+        document.getElementById('size-label').textContent = size;
+        
+        document.querySelectorAll('.size-btn').forEach(b => {
+            b.classList.remove('bg-charcoal', 'text-cream', 'border-charcoal');
+            b.classList.add('bg-cream', 'text-charcoal/70', 'border-charcoal/20');
+        });
+        btn.classList.add('bg-charcoal', 'text-cream', 'border-charcoal');
+        btn.classList.remove('bg-cream', 'text-charcoal/70', 'border-charcoal/20');
+    }
+    
+    // ===== STRIPE CHECKOUT =====
     async function initiateStripeCheckout() {
         const btn = document.getElementById('checkout-btn');
         const btnText = document.getElementById('btn-text');
@@ -221,152 +303,121 @@
         
         if (!btn || btn.disabled) return;
         
-        // Show loading state
         btn.disabled = true;
-        btnText.innerText = "Processing checkout...";
+        btnText.innerText = "Processing...";
         spinner.classList.remove('hidden');
         
         try {
             const response = await fetch('/create-checkout-session', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     productId: '<%= product.id %>',
                     name: '<%= product.name %>',
                     price: <%= product.price %>,
                     size: selectedSize,
-                    color: selectedColor
+                    color: selectedColorName
                 })
             });
             
             const data = await response.json();
             
             if (response.ok && data.url) {
-                // Redirect user to Stripe Checkout (or our mock checkout in dev)
                 window.location.href = data.url;
             } else {
                 throw new Error(data.error || "Unable to initiate payment session.");
             }
         } catch (error) {
             console.error("Payment error:", error);
-            alert("A minor inconvenience occurred while connecting to Stripe: " + error.message);
+            alert("A minor inconvenience occurred: " + error.message);
             
-            // Restore button state
             btn.disabled = false;
-            btnText.innerText = "Secure Comfort Now (Stripe)";
+            btnText.innerText = "Add to Cart — $<%= product.price.toFixed(2) %>";
             spinner.classList.add('hidden');
         }
     }
-
-    // --- PAYPAL CHECKOUT INTEGRATION ---
+    
+    // ===== PAYPAL INTEGRATION =====
     let paypalButtonsRendered = false;
-
+    
     function switchPaymentMethod(method) {
         const stripeBtn = document.getElementById('checkout-btn');
         const paypalBtnContainer = document.getElementById('paypal-button-container');
         const stripeTab = document.getElementById('pay-stripe-tab');
         const paypalTab = document.getElementById('pay-paypal-tab');
-
+        
         if (method === 'stripe') {
             stripeBtn.classList.remove('hidden');
             paypalBtnContainer.classList.add('hidden');
-            
             stripeTab.className = "py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
             paypalTab.className = "py-3 px-4 border border-charcoal/10 text-charcoal/60 hover:border-charcoal/30 font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
         } else if (method === 'paypal') {
             stripeBtn.classList.add('hidden');
             paypalBtnContainer.classList.remove('hidden');
-            
             paypalTab.className = "py-3 px-4 border-2 border-charcoal text-charcoal font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
             stripeTab.className = "py-3 px-4 border border-charcoal/10 text-charcoal/60 hover:border-charcoal/30 font-semibold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all";
-
+            
             if (!paypalButtonsRendered) {
                 renderPayPalButtons();
             }
         }
     }
-
+    
     function renderPayPalButtons() {
         if (typeof paypal === 'undefined') {
             console.error("PayPal SDK not loaded.");
             return;
         }
-
+        
         paypal.Buttons({
-            style: {
-                layout: 'vertical',
-                color:  'gold',
-                shape:  'rect',
-                label:  'paypal',
-                height: 48
-            },
+            style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 },
             createOrder: function(data, actions) {
                 return fetch('/create-paypal-order', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         productId: '<%= product.id %>',
                         name: '<%= product.name %>',
                         price: <%= product.price %>,
                         size: selectedSize,
-                        color: selectedColor
+                        color: selectedColorName
                     })
                 })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error("Failed to create order on server.");
-                    }
-                    return res.json();
-                })
+                .then(res => { if (!res.ok) throw new Error("Failed to create order."); return res.json(); })
                 .then(order => order.id)
-                .catch(err => {
-                    console.error("PayPal Create Order Error:", err);
-                    alert("A minor inconvenience occurred: " + err.message);
-                });
+                .catch(err => { console.error(err); alert("Error: " + err.message); });
             },
             onApprove: function(data, actions) {
                 return fetch('/capture-paypal-order', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         orderId: data.orderID,
                         productId: '<%= product.id %>',
                         name: '<%= product.name %>',
                         price: <%= product.price %>,
                         size: selectedSize,
-                        color: selectedColor
+                        color: selectedColorName
                     })
                 })
                 .then(res => res.json())
                 .then(details => {
-                    const queryParams = new URLSearchParams({
+                    const qp = new URLSearchParams({
                         session_id: data.orderID,
                         productId: '<%= product.id %>',
                         name: '<%= product.name %>',
                         price: <%= product.price %>,
                         size: selectedSize,
-                        color: selectedColor,
+                        color: selectedColorName,
                         paypal: 'true'
                     }).toString();
-                    window.location.href = `/success?${queryParams}`;
+                    window.location.href = `/success?${qp}`;
                 })
-                .catch(err => {
-                    console.error("PayPal Capture Order Error:", err);
-                    alert("Unable to capture payment. Please contact support.");
-                });
+                .catch(err => { console.error(err); alert("Unable to capture payment."); });
             },
-            onError: function(err) {
-                console.error("PayPal Error Callback:", err);
-                alert("An error occurred with PayPal checkout. Please try again.");
-            }
+            onError: function(err) { console.error(err); alert("PayPal error."); }
         }).render('#paypal-button-container');
-
+        
         paypalButtonsRendered = true;
     }
 </script>
