@@ -21,7 +21,7 @@ const products = [
     {
         id: "emotional-support-hoodie",
         name: "Emotional Support Hoodie",
-        price: 78.00,
+        price: 55.00,
         category: "hoodies",
         collections: ["introvert", "best-sellers"],
         wittyTag: "Because sometimes the only thing holding it together is 400gsm of organic cotton.",
@@ -35,7 +35,7 @@ const products = [
     {
         id: "currently-buffering-hoodie",
         name: "Currently Buffering Hoodie",
-        price: 78.00,
+        price: 55.00,
         category: "hoodies",
         collections: ["burnout", "best-sellers"],
         wittyTag: "Loading... please wait (or don't, I'm probably staying home anyway).",
@@ -49,7 +49,7 @@ const products = [
     {
         id: "running-on-empty-hoodie",
         name: "Running On Empty Hoodie",
-        price: 78.00,
+        price: 55.00,
         category: "hoodies",
         collections: ["burnout"],
         wittyTag: "Look this good while feeling this tired.",
@@ -63,7 +63,7 @@ const products = [
     {
         id: "let-me-think-about-it-hoodie",
         name: "Let Me Think About It... Hoodie",
-        price: 78.00,
+        price: 55.00,
         category: "hoodies",
         collections: ["overthinker"],
         wittyTag: "Will keep you warm while you decide if you're actually going.",
@@ -77,7 +77,7 @@ const products = [
     {
         id: "mentally-at-home-crewneck",
         name: "Mentally At Home Crewneck",
-        price: 68.00,
+        price: 55.00,
         category: "hoodies",
         collections: ["introvert"],
         wittyTag: "Physically present, emotionally in bed.",
@@ -91,7 +91,7 @@ const products = [
     {
         id: "social-battery-2-percent-tee",
         name: "Social Battery: 2% Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["burnout", "introvert"],
         wittyTag: "Going home now. Don't take it personally.",
@@ -105,7 +105,7 @@ const products = [
     {
         id: "replaying-conversations-since-2012-tee",
         name: "Replaying Conversations Since 2012 Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["overthinker", "best-sellers"],
         wittyTag: "Wait, did I say 'you too' to the waiter? Yes. Yes I did.",
@@ -119,7 +119,7 @@ const products = [
     {
         id: "i-already-regret-sending-that-tee",
         name: "I Already Regret Sending That Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["overthinker"],
         wittyTag: "Currently drafting an apology I won't send.",
@@ -133,7 +133,7 @@ const products = [
     {
         id: "one-minor-inconvenience-away-from-becoming-a-cryptid-tee",
         name: "One Minor Inconvenience Away From Becoming A Cryptid Tee",
-        price: 38.00,
+        price: 27.00,
         category: "tees",
         collections: ["best-sellers", "introvert"],
         wittyTag: "Will trade social skills for silence and a nice hollow log.",
@@ -147,7 +147,7 @@ const products = [
     {
         id: "per-my-last-email-tee",
         name: "Per My Last Email Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["corporate"],
         wittyTag: "An elegant way of saying 'Can you read?'.",
@@ -161,7 +161,7 @@ const products = [
     {
         id: "synergy-is-not-a-personality-tee",
         name: "Synergy Is Not A Personality Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["corporate"],
         wittyTag: "Neither is 'touching base'. Let's align on that.",
@@ -175,7 +175,7 @@ const products = [
     {
         id: "doing-my-best-tee",
         name: "Doing My Best Tee",
-        price: 36.00,
+        price: 27.00,
         category: "tees",
         collections: ["burnout", "overthinker"],
         wittyTag: "Everything is fine™... mostly.",
@@ -642,8 +642,8 @@ const products = [
 
 // Reusable custom items for the sublimation custom designer tool
 const customCategories = [
-    { id: "hoodies", name: "Premium Hoodie", basePrice: 85.00, colors: ["#1A1A1A", "#F5F5F5", "#BEBEBE", "#1B2A4A", "#36454F", "#FFD1DC", "#ADD8E6", "#A8B5A2", "#800020", "#6A0DAD", "#4169E1"] },
-    { id: "tees", name: "Heavyweight Tee", basePrice: 42.00, colors: ["#1A1A1A", "#F5F5F5", "#BEBEBE", "#1B2A4A", "#36454F", "#FFD1DC", "#ADD8E6", "#A8B5A2", "#800020", "#6A0DAD", "#4169E1"] },
+    { id: "hoodies", name: "Premium Hoodie", basePrice: 55.00, colors: ["#1A1A1A", "#F5F5F5", "#BEBEBE", "#1B2A4A", "#36454F", "#FFD1DC", "#ADD8E6", "#A8B5A2", "#800020", "#6A0DAD", "#4169E1"] },
+    { id: "tees", name: "Heavyweight Tee", basePrice: 27.00, colors: ["#1A1A1A", "#F5F5F5", "#BEBEBE", "#1B2A4A", "#36454F", "#FFD1DC", "#ADD8E6", "#A8B5A2", "#800020", "#6A0DAD", "#4169E1"] },
     { id: "hats", name: "Emotional Support Hat", basePrice: 32.00, colors: ["#2B2B2B", "#A8B5A2", "#8FA9C7"] },
     { id: "mugs", name: "Support Coffee Mug", basePrice: 28.00, colors: ["#F8F4EE"] },
     { id: "tumblers", name: "Support Tumbler", basePrice: 42.00, colors: ["#F8F4EE", "#2B2B2B", "#8FA9C7"] },
