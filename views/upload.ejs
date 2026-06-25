@@ -1,0 +1,164 @@
+<!-- Admin Upload Page — Owner drops in their designs -->
+
+<section class="py-12 sm:py-20 bg-cream min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+        
+        <% if (!authed) { %>
+            <!-- PASSWORD GATE -->
+            <div class="max-w-sm mx-auto text-center space-y-8 py-20">
+                <div class="space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gold">🔒 Admin Access</span>
+                    <h1 class="font-serif text-3xl font-bold text-charcoal">Upload Designs</h1>
+                    <p class="text-sm text-charcoal/50">Enter the password to upload product designs.</p>
+                </div>
+                
+                <% if (message) { %>
+                    <div class="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-lg"><%= message %></div>
+                <% } %>
+                
+                <form action="/admin/login" method="POST" class="space-y-4">
+                    <input type="password" name="password" placeholder="Enter password..." 
+                           class="w-full bg-cream border border-charcoal/20 rounded-lg p-3 text-sm text-center focus:border-gold outline-none" 
+                           autofocus />
+                    <button type="submit" class="w-full py-3 bg-charcoal text-cream font-bold text-xs tracking-wider uppercase rounded-full hover:bg-charcoal/90 transition-all">
+                        Unlock
+                    </button>
+                </form>
+            </div>
+        <% } else { %>
+            <!-- UPLOAD INTERFACE -->
+            <div class="space-y-8">
+                
+                <!-- Header -->
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold">🎨 Owner Mode</span>
+                        <h1 class="font-serif text-3xl font-bold text-charcoal mt-2">Upload Product Designs</h1>
+                        <p class="text-sm text-charcoal/50 mt-1">Drag a design image onto any product below. PNG or JPG, up to 20MB.</p>
+                    </div>
+                    <a href="/admin/logout" class="text-xs text-charcoal/40 hover:text-charcoal underline">Logout</a>
+                </div>
+                
+                <!-- Success message area -->
+                <div id="upload-message" class="hidden bg-sage/20 text-charcoal text-sm p-4 rounded-lg"></div>
+                
+                <!-- Product Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% products.forEach(product => { %>
+                        <div class="group relative bg-cream border border-charcoal/10 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                             ondragover="event.preventDefault()" 
+                             ondrop="handleDrop(event, '<%= product.id %>')">
+                            
+                            <!-- Current design preview -->
+                            <div class="aspect-square bg-charcoal/5 flex items-center justify-center p-4 border-b border-charcoal/5 relative">
+                                <img src="/images/products/<%= product.id %>.png" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+                                     alt="<%= product.name %>" 
+                                     class="w-full h-full object-contain" />
+                                <div style="display:none" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                                    <span class="font-serif text-xs font-bold text-charcoal/40 uppercase whitespace-pre-line"><%= product.designText || product.name %></span>
+                                </div>
+                                
+                                <!-- Drop zone overlay -->
+                                <div class="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-all duration-300 flex items-center justify-center">
+                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-charcoal/90 text-cream text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">
+                                        🖱 Drop design here
+                                    </div>
+                                </div>
+                                
+                                <!-- Upload spinner -->
+                                <div class="absolute inset-0 bg-cream/80 hidden items-center justify-center" id="spinner-<%= product.id %>">
+                                    <svg class="animate-spin h-8 w-8 text-gold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4">
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-gold"><%= product.category %></span>
+                                <h3 class="font-serif text-sm font-bold text-charcoal mt-1"><%= product.name %></h3>
+                                <p class="text-[10px] text-charcoal/40 mt-1">ID: <code class="bg-charcoal/5 px-1 rounded"><%= product.id %></code></p>
+                                
+                                <!-- Click to upload fallback -->
+                                <label class="mt-2 inline-flex items-center justify-center px-3 py-1.5 border border-dashed border-charcoal/20 rounded text-[10px] text-charcoal/50 hover:border-gold hover:text-gold cursor-pointer transition-all">
+                                    📁 Choose file
+                                    <input type="file" accept="image/*" class="hidden" onchange="uploadFile(this, '<%= product.id %>')" />
+                                </label>
+                                
+                                <!-- Status badge -->
+                                <span class="ml-2 text-[10px] font-bold" id="status-<%= product.id %>">⬜ Placeholder</span>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</section>
+
+<script>
+    async function handleDrop(event, productId) {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        if (!file) return;
+        await doUpload(file, productId);
+    }
+    
+    async function uploadFile(input, productId) {
+        const file = input.files[0];
+        if (!file) return;
+        await doUpload(file, productId);
+        input.value = '';
+    }
+    
+    async function doUpload(file, productId) {
+        // Show spinner
+        const spinner = document.getElementById('spinner-' + productId);
+        const statusEl = document.getElementById('status-' + productId);
+        if (spinner) spinner.style.display = 'flex';
+        statusEl.textContent = '⏳ Uploading...';
+        
+        const formData = new FormData();
+        formData.append('design', file);
+        formData.append('productId', productId);
+        
+        try {
+            const res = await fetch('/admin/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            
+            if (data.success) {
+                statusEl.textContent = '✅ Live!';
+                // Force refresh the image
+                const img = event.target?.closest?.('[ondrop]')?.querySelector('img') 
+                    || document.querySelector(`[ondrop*="${productId}"] img`);
+                if (img) {
+                    img.src = '/images/products/' + productId + '.png?t=' + Date.now();
+                    img.style.display = '';
+                    const fallback = img.nextElementSibling;
+                    if (fallback) fallback.style.display = 'none';
+                } else {
+                    // Refresh the page to show updates
+                    location.reload();
+                }
+                showMessage('✅ Design uploaded for <strong>' + productId + '</strong> — now live on product pages!', 'success');
+            } else {
+                statusEl.textContent = '❌ Failed';
+                showMessage('❌ ' + (data.error || 'Upload failed'), 'error');
+            }
+        } catch (err) {
+            statusEl.textContent = '❌ Error';
+            showMessage('❌ Network error: ' + err.message, 'error');
+        }
+        
+        if (spinner) spinner.style.display = 'none';
+    }
+    
+    function showMessage(msg, type) {
+        const el = document.getElementById('upload-message');
+        el.innerHTML = msg;
+        el.className = (type === 'error' ? 'bg-red-50 border border-red-200 text-red-600' : 'bg-sage/20 text-charcoal') + ' text-sm p-4 rounded-lg';
+        el.classList.remove('hidden');
+        setTimeout(() => el.classList.add('hidden'), 4000);
+    }
+</script>

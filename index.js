@@ -4,6 +4,9 @@
 
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
 const { products, customCategories } = require('./products');
 
 const app = express();
@@ -16,6 +19,32 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static public assets
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Multer config: save uploaded designs to public/images/products/
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'public/images/products'));
+    },
+    filename: (req, file, cb) => {
+        // Use a temp name — we'll rename after we know the productId
+        const ext = path.extname(file.originalname) || '.png';
+        cb(null, 'upload-temp-' + Date.now() + ext);
+    }
+});
+const upload = multer({ 
+    storage,
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB max
+    fileFilter: (req, file, cb) => {
+        const allowed = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
+        if (allowed.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only PNG, JPG, GIF, and WebP images are allowed'));
+        }
+    }
+});
 
 // Custom renderer middleware to handle nested EJS layout seamlessly
 app.use((req, res, next) => {
@@ -381,6 +410,84 @@ app.post('/capture-paypal-order', async (req, res) => {
         console.error("PayPal Capture Order Error:", err);
         res.status(500).json({ error: err.message });
     }
+});
+
+// --- OWNER UPLOAD PAGE ---
+
+// Simple session-based auth for the upload page
+const UPLOAD_PASSWORD = 'esaboss2026'; // simple password
+
+// GET upload page — check for password cookie
+app.get('/admin', (req, res) => {
+    const authed = req.cookies && req.cookies.upload_auth === UPLOAD_PASSWORD;
+    res.renderView('upload', {
+        title: "Upload Designs | Admin",
+        authed,
+        products,
+        message: null
+    });
+});
+
+// POST password form
+app.post('/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password === UPLOAD_PASSWORD) {
+        res.cookie('upload_auth', UPLOAD_PASSWORD, { maxAge: 86400000, httpOnly: true }); // 24hr
+        res.redirect('/admin');
+    } else {
+        res.renderView('upload', {
+            title: "Upload Designs | Admin",
+            authed: false,
+            products,
+            message: 'Wrong password. Try again.'
+        });
+    }
+});
+
+// POST upload image — requires auth
+app.post('/admin/upload', (req, res, next) => {
+    const authed = req.cookies && req.cookies.upload_auth === UPLOAD_PASSWORD;
+    if (!authed) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    next();
+}, upload.single('design'), (req, res) => {
+    const file = req.file;
+    const productId = req.body.productId || '';
+    
+    if (!file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    // Rename temp file to the product ID filename
+    const targetName = productId + '.png';
+    const targetPath = path.join(__dirname, 'public/images/products', targetName);
+    
+    try {
+        // Remove old file if it exists
+        if (fs.existsSync(targetPath)) {
+            fs.unlinkSync(targetPath);
+        }
+        // Rename temp file to target
+        fs.renameSync(file.path, targetPath);
+    } catch (err) {
+        console.error('File rename error:', err);
+        // If rename fails, just leave the temp file
+    }
+    
+    res.json({ 
+        success: true, 
+        filename: targetName,
+        productId: productId,
+        path: '/images/products/' + targetName,
+        message: productId ? `Design uploaded for "${productId}"` : 'Design uploaded!'
+    });
+});
+
+// Logout
+app.get('/admin/logout', (req, res) => {
+    res.clearCookie('upload_auth');
+    res.redirect('/admin');
 });
 
 // 404 Fallback

@@ -28,8 +28,17 @@
                 <!-- Subtle fabric texture overlay -->
                 <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMCA0TDQgMFoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3N2Zz4=');"></div>
                 
-                <!-- The printed design overlay -->
-                <div class="relative z-10 flex flex-col items-center justify-center text-center p-8 max-w-xs">
+                <!-- Uploaded design image (if exists) — hidden by default, shown on load -->
+                <img src="/images/products/<%= product.id %>.png" 
+                     data-attempt="jpg"
+                     onerror="handleProductImageError(this, '<%= product.id %>', '<%= product.category %>')"
+                     onload="if(this.src.indexOf('placeholders') === -1 && this.naturalWidth > 50) { this.style.display='block'; document.getElementById('text-design-layer').style.display='none'; }"
+                     alt="<%= product.name %> design" 
+                     id="product-design-image"
+                     class="absolute inset-0 w-full h-full object-contain p-4 z-10 hidden" />
+                
+                <!-- The printed design overlay (text-based fallback — shown if no image loaded) -->
+                <div id="text-design-layer" class="relative z-10 flex flex-col items-center justify-center text-center p-8 max-w-xs">
                     <!-- Design text rendered right on the garment -->
                     <div id="design-text-container" class="transition-colors duration-300">
                         <% if (product.designText) { %>
