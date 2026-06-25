@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" width="600" height="180">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@300;400;500&amp;display=swap');
+    </style>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="180" fill="#F8F4EE" rx="8"/>
+
+  <!-- Stitched heart icon -->
+  <g transform="translate(55, 52)">
+    <!-- Stitch effect - dashed outline heart -->
+    <path d="M0,15 C0,6 4,-2 12,-2 C20,-2 24,6 24,15 C24,28 12,38 12,38 C12,38 0,28 0,15 Z"
+          fill="none" stroke="#C6A96B" stroke-width="2.5" stroke-dasharray="4,3"/>
+    <!-- Inner fill with sage -->
+    <path d="M3,15 C3,8 6.5,2 12,2 C17.5,2 21,8 21,15 C21,25 12,33 12,33 C12,33 3,25 3,15 Z"
+          fill="#A8B5A2" opacity="0.3"/>
+  </g>
+
+  <!-- Main logo text -->
+  <text x="100" y="58" font-family="'Playfair Display', 'Georgia', serif" font-size="28" font-weight="700"
+        fill="#2B2B2B" letter-spacing="1.5">EMOTIONAL SUPPORT</text>
+
+  <text x="100" y="88" font-family="'Playfair Display', 'Georgia', serif" font-size="22" font-weight="600"
+        fill="#2B2B2B" letter-spacing="4">APPAREL</text>
+
+  <!-- Divider line with gold -->
+  <line x1="100" y1="100" x2="480" y2="100" stroke="#C6A96B" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Tagline -->
+  <text x="100" y="122" font-family="'Inter', 'Helvetica', sans-serif" font-size="11" font-weight="300"
+        fill="#8FA9C7" letter-spacing="3">...because therapy is expensive</text>
+
+  <!-- Small "by K&D" -->
+  <text x="100" y="145" font-family="'Inter', 'Helvetica', sans-serif" font-size="9" font-weight="400"
+        fill="#A8B5A2" letter-spacing="2">BY K&amp;D</text>
+</svg>

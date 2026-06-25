@@ -61,23 +61,23 @@ app.get('/collections/:id', (req, res) => {
     const collectionMetadata = {
         burnout: {
             name: "The Burnout Collection",
-            tagline: "For the high-achiever in low-power mode.",
-            desc: "You’re doing a lot. Probably too much. The Burnout Collection is our tribute to the over-extended. Featuring heavyweight fleece and crisp ceramics designed to handle the weight of another 'per my last email.'"
+            tagline: "Running on fumes, but make it fashion.",
+            desc: "For those who have reached the 'if I sit down I'll never get up' stage of life. Featuring heavyweight fleece that feels like a long-overdue sick day you're too afraid to take."
         },
         introvert: {
             name: "The Introvert Collection",
-            tagline: "Soft clothes for hard exits.",
-            desc: "Home is where the soft clothes are. This collection is a love letter to the cancelled plan and the early departure. Premium fabrics that feel as good as a 'texting is fine' boundary."
+            tagline: "Please don't look at me.",
+            desc: "A love letter to the 'Read' receipt and the early exit. These clothes are designed to facilitate your successful disappearance from any social situation. If you can read this, you're too close."
         },
         overthinker: {
             name: "The Overthinker Collection",
-            tagline: "High-end fabric for low-end regrets.",
-            desc: "For the professional analyzer. Whether you’re replaying a conversation from 2012 or drafting a text you’ll never send, do it in luxury. Designed to be as deep and layered as your thought process."
+            tagline: "Analyzing every mistake since birth.",
+            desc: "For the professional ruminator. Whether you're drafting an apology for a minor inconvenience or replaying a 3-second interaction from a decade ago, do it in luxury."
         },
         corporate: {
             name: "The Corporate Survivor Collection",
-            tagline: "Synergy is not a personality.",
-            desc: "Surviving the 9-to-5 with your sanity (mostly) intact. From mugs that hold your liquid patience to tees that speak the truth your HR department won't."
+            tagline: "This meeting could have been a nap.",
+            desc: "Surviving the 9-to-5 with your sanity hanging by a thread. Gear for the 'Per my last email' warriors who know that synergy is just a fancy word for 'I have no idea what I'm doing.'"
         }
     };
 
