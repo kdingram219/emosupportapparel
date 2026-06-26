@@ -22,10 +22,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Multer config: save uploaded designs to public/images/products/
+// Multer config: save uploaded designs to /tmp/ (works on Vercel serverless)
+// On Vercel, the project directory is read-only, so we use /tmp/ and serve
+// from there via the custom image route. Files persist for the function instance lifetime.
+const UPLOAD_DIR = process.env.VERCEL ? '/tmp/esa-uploads' : path.join(__dirname, 'public/images/products');
+try { if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch(e) {}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/images/products'));
+        cb(null, UPLOAD_DIR);
     },
     filename: (req, file, cb) => {
         // Use a temp name — we'll rename after we know the productId
@@ -97,7 +102,23 @@ app.get('/images/products/:filename', (req, res) => {
     const productId = parsed.name;
     const reqExt = parsed.ext.toLowerCase();
     
-    // 1. If they requested with an extension, try exact match first
+    // 0. Check upload dir first (/tmp/ on Vercel, products dir locally)
+    if (UPLOAD_DIR && fs.existsSync(UPLOAD_DIR)) {
+        if (reqExt) {
+            const exactPath = path.join(UPLOAD_DIR, filename);
+            if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
+                return res.sendFile(exactPath);
+            }
+        }
+        for (const ext of ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG']) {
+            const filePath = path.join(UPLOAD_DIR, productId + ext);
+            if (fs.existsSync(filePath) && fs.statSync(filePath).size > 100) {
+                return res.sendFile(filePath);
+            }
+        }
+    }
+    
+    // 1. Check products dir for exact match
     if (reqExt) {
         const exactPath = path.join(productsDir, filename);
         if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
@@ -105,7 +126,7 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 2. Try productId with common extensions
+    // 2. Try productId with common extensions in products dir
     for (const ext of ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG']) {
         const filePath = path.join(productsDir, productId + ext);
         if (fs.existsSync(filePath) && fs.statSync(filePath).size > 100) {
@@ -122,19 +143,20 @@ app.get('/images/products/:filename', (req, res) => {
     }
     
     // 4. Search all files for one containing the productId
-    try {
-        const files = fs.readdirSync(productsDir);
-        const searchTerms = productId.toLowerCase().replace(/-/g, ' ').split(' ');
-        const match = files.find(f => {
-            const name = path.basename(f, path.extname(f)).toLowerCase().replace(/-/g, ' ');
-            // Match if all significant words in the product ID appear in the filename
-            const significant = searchTerms.filter(w => w.length > 3);
-            return significant.length > 0 && significant.every(w => name.includes(w));
-        });
-        if (match) {
-            return res.sendFile(path.join(productsDir, match));
-        }
-    } catch(e) {}
+    for (const dir of [productsDir, UPLOAD_DIR].filter(d => d && fs.existsSync(d))) {
+        try {
+            const files = fs.readdirSync(dir);
+            const searchTerms = productId.toLowerCase().replace(/-/g, ' ').split(' ');
+            const match = files.find(f => {
+                const name = path.basename(f, path.extname(f)).toLowerCase().replace(/-/g, ' ');
+                const significant = searchTerms.filter(w => w.length > 3);
+                return significant.length > 0 && significant.every(w => name.includes(w));
+            });
+            if (match) {
+                return res.sendFile(path.join(dir, match));
+            }
+        } catch(e) {}
+    }
     
     // 5. Nothing found — return 404 (client JS will show text-based design)
     res.status(404).end();
@@ -526,9 +548,9 @@ app.post('/admin/upload', (req, res, next) => {
         return res.status(400).json({ error: 'No file uploaded' });
     }
     
-    // Rename temp file to the product ID filename
+    // Save to upload dir (/tmp/ on Vercel, products dir locally)
     const targetName = productId + '.png';
-    const targetPath = path.join(__dirname, 'public/images/products', targetName);
+    const targetPath = path.join(UPLOAD_DIR, targetName);
     
     try {
         // Remove old file if it exists
@@ -539,8 +561,20 @@ app.post('/admin/upload', (req, res, next) => {
         fs.renameSync(file.path, targetPath);
     } catch (err) {
         console.error('File rename error:', err);
-        // If rename fails, just leave the temp file
+        // Try copy instead of rename (cross-device on Vercel)
+        try {
+            fs.copyFileSync(file.path, targetPath);
+            try { fs.unlinkSync(file.path); } catch(e) {}
+        } catch(e) {
+            console.error('File copy error:', e);
+        }
     }
+    
+    // Also try to mirror to public dir (works locally, fails silently on Vercel)
+    try {
+        const mirrorPath = path.join(__dirname, 'public/images/products', targetName);
+        fs.copyFileSync(targetPath, mirrorPath);
+    } catch(e) { /* Vercel: read-only dir, ignore */ }
     
     res.json({ 
         success: true, 
