@@ -73,6 +73,73 @@ app.use((req, res, next) => {
 
 // --- ROUTES ---
 
+// --- PRODUCT IMAGE SERVING WITH SMART FALLBACK ---
+// Load the image mapping created by the owner's uploads
+const productImageMap = (() => {
+    try {
+        const mapPath = path.join(__dirname, 'public/images/products/product-images.json');
+        if (fs.existsSync(mapPath)) {
+            return JSON.parse(fs.readFileSync(mapPath, 'utf8'));
+        }
+    } catch(e) { console.error("Error loading image map:", e.message); }
+    return {};
+})();
+
+// Serve product images with cascading fallback
+// Catches /images/products/:filename with or without extension
+// Express 5 uses path-to-regexp v8 — simple param matching
+app.get('/images/products/:filename', (req, res) => {
+    const { filename } = req.params;
+    const productsDir = path.join(__dirname, 'public/images/products');
+    
+    // Strip extension to get the productId
+    const parsed = path.parse(filename);
+    const productId = parsed.name;
+    const reqExt = parsed.ext.toLowerCase();
+    
+    // 1. If they requested with an extension, try exact match first
+    if (reqExt) {
+        const exactPath = path.join(productsDir, filename);
+        if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
+            return res.sendFile(exactPath);
+        }
+    }
+    
+    // 2. Try productId with common extensions
+    for (const ext of ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG']) {
+        const filePath = path.join(productsDir, productId + ext);
+        if (fs.existsSync(filePath) && fs.statSync(filePath).size > 100) {
+            return res.sendFile(filePath);
+        }
+    }
+    
+    // 3. Check the mapping file
+    if (productImageMap[productId]) {
+        const mappedFile = path.join(productsDir, productImageMap[productId]);
+        if (fs.existsSync(mappedFile)) {
+            return res.sendFile(mappedFile);
+        }
+    }
+    
+    // 4. Search all files for one containing the productId
+    try {
+        const files = fs.readdirSync(productsDir);
+        const searchTerms = productId.toLowerCase().replace(/-/g, ' ').split(' ');
+        const match = files.find(f => {
+            const name = path.basename(f, path.extname(f)).toLowerCase().replace(/-/g, ' ');
+            // Match if all significant words in the product ID appear in the filename
+            const significant = searchTerms.filter(w => w.length > 3);
+            return significant.length > 0 && significant.every(w => name.includes(w));
+        });
+        if (match) {
+            return res.sendFile(path.join(productsDir, match));
+        }
+    } catch(e) {}
+    
+    // 5. Nothing found — return 404 (client JS will show text-based design)
+    res.status(404).end();
+});
+
 // 1. Homepage Route
 app.get('/', (req, res) => {
     res.renderView('index', {
