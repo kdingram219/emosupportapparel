@@ -1,0 +1,39 @@
+<!-- Design Catalog — Browse All 44 Designs -->
+<section class="py-12 sm:py-20 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold">🎨 Shop Designs</span>
+            <h1 class="font-serif text-4xl sm:text-5xl font-bold text-charcoal">Pick Your Artwork</h1>
+            <p class="text-sm text-charcoal/50">Browse our design catalog. Pick one, then choose what to put it on — hoodie, tee, mug, tote, and more.</p>
+        </div>
+        
+        <!-- Design Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+            <% designs.forEach(design => { %>
+                <a href="/designs/<%= design.id %>" class="group bg-white rounded-xl overflow-hidden border border-charcoal/5 hover:shadow-lg hover:border-gold/30 transition-all duration-300">
+                    <!-- Design Preview -->
+                    <div class="aspect-square bg-cream relative overflow-hidden">
+                        <img src="/images/products/<%= design.filename %>" 
+                             alt="<%= design.name %>"
+                             class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+                             loading="lazy" />
+                    </div>
+                    <!-- Design Info -->
+                    <div class="p-3 sm:p-4">
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-gold"><%= design.filetype %> • <%= design.size_kb %>KB</span>
+                        <h3 class="font-serif text-sm font-bold text-charcoal mt-1 leading-tight"><%= design.name %></h3>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+        
+        <!-- Back link -->
+        <div class="mt-12 text-center">
+            <a href="/" class="inline-flex items-center text-xs text-charcoal/40 hover:text-gold transition-colors uppercase tracking-wider">
+                ← Back to Emotional Support Apparel
+            </a>
+        </div>
+    </div>
+</section>

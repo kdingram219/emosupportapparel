@@ -162,11 +162,79 @@ app.get('/images/products/:filename', (req, res) => {
     res.status(404).end();
 });
 
+// Load the design catalog
+const designCatalog = (() => {
+    try {
+        const catalogPath = path.join(__dirname, 'data/designs.json');
+        if (fs.existsSync(catalogPath)) {
+            return JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+        }
+    } catch(e) { console.error("Error loading design catalog:", e.message); }
+    return [];
+})();
+
+// Product types available for custom designs (the blank products)
+const APPLY_PRODUCT_TYPES = [
+    { id: 'hoodies', name: 'Hoodie', basePrice: 55, colors: ['Black','White','Heather Gray','Navy','Charcoal','Light Pink','Light Blue','Sage Green','Burgundy','Purple','Royal Blue'] },
+    { id: 'tees', name: 'T-Shirt', basePrice: 27, colors: ['Black','White','Heather Gray','Navy','Charcoal','Light Pink','Light Blue','Sage Green','Burgundy','Purple','Royal Blue'] },
+    { id: 'crewnecks', name: 'Crewneck', basePrice: 55, colors: ['Black','White','Heather Gray','Navy','Charcoal','Light Pink','Light Blue','Sage Green','Burgundy','Purple','Royal Blue'] },
+    { id: 'mugs', name: 'Coffee Mug', basePrice: 22, colors: ['White','Black'] },
+    { id: 'tumblers', name: 'Tumbler', basePrice: 28, colors: ['White','Black','Stainless'] },
+    { id: 'bags', name: 'Tote Bag', basePrice: 32, colors: ['Natural','Black','Navy'] },
+    { id: 'hats', name: 'Hat', basePrice: 25, colors: ['Black','White','Navy','Charcoal'] },
+    { id: 'pillows', name: 'Pillow', basePrice: 35, colors: ['White','Cream','Charcoal'] },
+    { id: 'signs', name: 'Metal Sign', basePrice: 30, colors: ['Silver','Black','White'] }
+];
+
 // 1. Homepage Route
 app.get('/', (req, res) => {
     res.renderView('index', {
         title: "Soft Clothes, Hard Life. Premium Emotional-Support Gear",
         products
+    });
+});
+
+// Design Catalog — Browse all 44 designs
+app.get('/designs', (req, res) => {
+    res.renderView('designs', {
+        title: "Shop Designs — Pick Your Artwork",
+        designs: designCatalog
+    });
+});
+
+// Design Configurator — Pick a design, then choose product/color/size
+app.get('/designs/:designId', (req, res) => {
+    const design = designCatalog.find(d => d.id === req.params.designId);
+    if (!design) {
+        return res.status(404).send("Design not found.");
+    }
+    
+    const productTypeId = req.query.product || 'hoodies';
+    const productType = APPLY_PRODUCT_TYPES.find(t => t.id === productTypeId) || APPLY_PRODUCT_TYPES[0];
+    
+    res.renderView('apply', {
+        title: `${design.name} — Apply to Gear`,
+        design,
+        productTypes: APPLY_PRODUCT_TYPES,
+        selectedProductType: productType
+    });
+});
+
+// Design to Cart — Add a customized design product to cart
+app.post('/cart/add-design', (req, res) => {
+    const { designId, productTypeId, color, size } = req.body;
+    const design = designCatalog.find(d => d.id === designId);
+    const productType = APPLY_PRODUCT_TYPES.find(t => t.id === productTypeId);
+    
+    if (!design || !productType) {
+        return res.status(400).json({ error: 'Invalid design or product type' });
+    }
+    
+    // Redirect to the existing checkout flow with design info
+    res.json({
+        success: true,
+        message: `${design.name} on ${productType.name} in ${color || 'Black'} (${size || 'M'}) added to cart`,
+        redirect: '/checkout'
     });
 });
 

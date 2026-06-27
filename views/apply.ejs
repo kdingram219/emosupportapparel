@@ -1,0 +1,180 @@
+<!-- Design Configurator — Pick Product, Color, Size, See Mockup -->
+<section class="py-12 sm:py-20 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Breadcrumb -->
+        <div class="flex items-center space-x-2 text-xs uppercase tracking-widest text-charcoal/40 mb-8">
+            <a href="/" class="hover:text-gold transition-colors">Home</a>
+            <span>/</span>
+            <a href="/designs" class="hover:text-gold transition-colors">Designs</a>
+            <span>/</span>
+            <span class="text-charcoal"><%= design.name %></span>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            <!-- LEFT: Design Preview (large) -->
+            <div class="lg:col-span-6">
+                <div class="sticky top-8">
+                    <div class="aspect-square bg-cream border border-charcoal/10 rounded-2xl flex items-center justify-center p-4 sm:p-6 shadow-md overflow-hidden" 
+                         id="design-preview">
+                        <!-- The design image — shows on top of selected product type background -->
+                        <div class="relative w-full h-full flex items-center justify-center">
+                            <img src="/images/products/<%= design.filename %>" 
+                                 alt="<%= design.name %>"
+                                 class="max-w-full max-h-full object-contain" 
+                                 id="design-image" />
+                        </div>
+                    </div>
+                    
+                    <!-- Design Name -->
+                    <div class="mt-4 text-center">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold"><%= design.filetype %> • <%= design.size_kb %>KB</span>
+                        <h2 class="font-serif text-2xl font-bold text-charcoal"><%= design.name %></h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RIGHT: Configurator -->
+            <div class="lg:col-span-6 space-y-8">
+                
+                <div class="space-y-2">
+                    <h3 class="font-serif text-2xl font-bold text-charcoal">Apply This Design</h3>
+                    <p class="text-sm text-charcoal/50">Choose what product to put this design on, then pick your color and size.</p>
+                </div>
+                
+                <!-- Step 1: Pick Product Type -->
+                <div class="space-y-3">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/60">1. Pick a Product</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="product-type-grid">
+                        <% productTypes.forEach(pt => { %>
+                            <a href="/designs/<%= design.id %>?product=<%= pt.id %>" 
+                               class="px-4 py-3 rounded-lg border text-center transition-all duration-200 text-xs font-bold uppercase tracking-wider
+                               <%= selectedProductType.id === pt.id 
+                                   ? 'bg-charcoal text-cream border-charcoal shadow-md' 
+                                   : 'bg-cream text-charcoal/50 border-charcoal/10 hover:border-charcoal/30 hover:text-charcoal' %>">
+                                <%= pt.name %>
+                                <br><span class="text-[10px] font-normal normal-case opacity-60">from $<%= pt.basePrice %></span>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Pick Color -->
+                <div class="space-y-3">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/60">2. Pick a Color</label>
+                    <div class="flex flex-wrap gap-2" id="color-swatches">
+                        <% selectedProductType.colors.forEach(c => { %>
+                            <button onclick="selectColor(this, '<%= c %>')" 
+                                    class="w-8 h-8 rounded-full border-2 border-transparent hover:border-gold transition-all duration-200 <%= c === selectedProductType.colors[0] ? 'border-gold ring-2 ring-gold/30' : '' %>"
+                                    style="background-color: <%= 
+                                        c === 'Black' ? '#1A1A1A' :
+                                        c === 'White' ? '#F5F5F5' :
+                                        c === 'Heather Gray' ? '#BEBEBE' :
+                                        c === 'Navy' ? '#1B2A4A' :
+                                        c === 'Charcoal' ? '#36454F' :
+                                        c === 'Light Pink' ? '#FFD1DC' :
+                                        c === 'Light Blue' ? '#ADD8E6' :
+                                        c === 'Sage Green' ? '#A8B5A2' :
+                                        c === 'Burgundy' ? '#800020' :
+                                        c === 'Purple' ? '#6A0DAD' :
+                                        c === 'Royal Blue' ? '#4169E1' :
+                                        c === 'Natural' ? '#E8DCC8' :
+                                        c === 'Stainless' ? '#C0C0C0' :
+                                        c === 'Cream' ? '#F8F4EE' :
+                                        c === 'Silver' ? '#C0C0C0' :
+                                        '#F5F5F5'
+                                    %>"
+                                    title="<%= c %>">
+                            <span class="sr-only"><%= c %></span>
+                        <% }); %>
+                    </div>
+                    <p class="text-xs text-charcoal/40" id="selected-color-name">Selected: <strong><%= selectedProductType.colors[0] %></strong></p>
+                </div>
+                
+                <!-- Step 3: Pick Size (for apparel) -->
+                <div class="space-y-3" id="size-selector">
+                    <label class="text-xs font-bold uppercase tracking-widest text-charcoal/60">3. Pick a Size</label>
+                    <div class="flex flex-wrap gap-2">
+                        <% ['XS','S','M','L','XL','2XL','3XL'].forEach(s => { %>
+                            <button onclick="selectSize(this, '<%= s %>')" 
+                                    class="px-4 py-2 rounded-lg border text-center transition-all duration-200 text-xs font-bold
+                                    <%= s === 'M' 
+                                        ? 'bg-charcoal text-cream border-charcoal shadow-md' 
+                                        : 'bg-cream text-charcoal/50 border-charcoal/10 hover:border-charcoal/30 hover:text-charcoal' %>">
+                                <%= s %>
+                            </button>
+                        <% }); %>
+                    </div>
+                </div>
+                
+                <!-- Price & Add to Cart -->
+                <div class="bg-charcoal/5 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-charcoal/50">Price</span>
+                        <span class="font-serif text-3xl font-bold text-charcoal">$<%= selectedProductType.basePrice %></span>
+                    </div>
+                    <button onclick="addToCart()" 
+                            class="w-full py-4 bg-gold text-charcoal font-bold text-xs uppercase tracking-wider rounded-full hover:bg-gold/90 transition-all shadow-md hover:shadow-lg">
+                        Add to Cart
+                    </button>
+                    <p class="text-[10px] text-charcoal/30 text-center italic">Free shipping on orders $65+</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let selectedColor = '<%= selectedProductType.colors[0] %>';
+    let selectedSize = 'M';
+    
+    function selectColor(el, colorName) {
+        selectedColor = colorName;
+        document.querySelectorAll('#color-swatches button').forEach(b => {
+            b.classList.remove('border-gold', 'ring-2', 'ring-gold/30');
+        });
+        el.classList.add('border-gold', 'ring-2', 'ring-gold/30');
+        document.getElementById('selected-color-name').innerHTML = 'Selected: <strong>' + colorName + '</strong>';
+    }
+    
+    function selectSize(el, size) {
+        selectedSize = size;
+        document.querySelectorAll('#size-selector button').forEach(b => {
+            b.classList.remove('bg-charcoal', 'text-cream', 'border-charcoal', 'shadow-md');
+            b.classList.add('bg-cream', 'text-charcoal/50', 'border-charcoal/10');
+        });
+        el.classList.remove('bg-cream', 'text-charcoal/50', 'border-charcoal/10');
+        el.classList.add('bg-charcoal', 'text-cream', 'border-charcoal', 'shadow-md');
+    }
+    
+    async function addToCart() {
+        const btn = event.target;
+        btn.textContent = '⏳ Adding...';
+        btn.disabled = true;
+        
+        try {
+            const res = await fetch('/cart/add-design', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    designId: '<%= design.id %>',
+                    productTypeId: '<%= selectedProductType.id %>',
+                    color: selectedColor,
+                    size: selectedSize
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                btn.textContent = '✅ Added!';
+                setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 2000);
+            } else {
+                btn.textContent = '❌ Error';
+                setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 2000);
+            }
+        } catch(e) {
+            btn.textContent = '❌ Error';
+            setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 2000);
+        }
+    }
+</script>
