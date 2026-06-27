@@ -113,18 +113,28 @@
     }
     
     async function doUpload(file, productId) {
+        console.log('doUpload called:', productId, file.name, file.size);
         // Show spinner
         const spinner = document.getElementById('spinner-' + productId);
         const statusEl = document.getElementById('status-' + productId);
-        if (spinner) spinner.style.display = 'flex';
+        if (spinner) { spinner.style.display = 'flex'; console.log('spinner shown'); }
+        else { console.log('spinner NOT found for', productId); }
         statusEl.textContent = '⏳ Uploading...';
         
         const formData = new FormData();
         formData.append('design', file);
         formData.append('productId', productId);
         
+        console.log('FormData created, sending fetch...');
+        
         try {
-            const res = await fetch('/admin/upload', { method: 'POST', body: formData });
+            const res = await fetch('/admin/upload', { method: 'POST', body: formData, credentials: 'same-origin' });
+            if (!res.ok) {
+                const text = await res.text();
+                statusEl.textContent = '❌ Error ' + res.status;
+                showMessage('❌ Server returned ' + res.status + ': ' + text.substring(0, 200), 'error');
+                return;
+            }
             const data = await res.json();
             
             if (data.success) {
@@ -147,8 +157,9 @@
                 showMessage('❌ ' + (data.error || 'Upload failed'), 'error');
             }
         } catch (err) {
+            console.error('Upload error:', err.name, err.message, err.stack);
             statusEl.textContent = '❌ Error';
-            showMessage('❌ Network error: ' + err.message, 'error');
+            showMessage('❌ Error: ' + err.name + ' — ' + err.message, 'error');
         }
         
         if (spinner) spinner.style.display = 'none';

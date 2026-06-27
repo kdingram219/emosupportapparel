@@ -589,7 +589,7 @@ app.get('/admin', (req, res) => {
 app.post('/admin/login', (req, res) => {
     const { password } = req.body;
     if (password === UPLOAD_PASSWORD) {
-        res.cookie('upload_auth', UPLOAD_PASSWORD, { maxAge: 86400000, httpOnly: true }); // 24hr
+        res.cookie('upload_auth', UPLOAD_PASSWORD, { maxAge: 86400000, httpOnly: true, sameSite: 'lax', path: '/' }); // 24hr
         res.redirect('/admin');
     } else {
         res.renderView('upload', {
