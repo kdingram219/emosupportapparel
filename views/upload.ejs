@@ -46,6 +46,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <% products.forEach(product => { %>
                         <div class="group relative bg-cream border border-charcoal/10 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                             data-product-id="<%= product.id %>"
                              ondragover="event.preventDefault()" 
                              ondrop="handleDrop(event, '<%= product.id %>')">
                             
@@ -113,19 +114,14 @@
     }
     
     async function doUpload(file, productId) {
-        console.log('doUpload called:', productId, file.name, file.size);
-        // Show spinner
         const spinner = document.getElementById('spinner-' + productId);
         const statusEl = document.getElementById('status-' + productId);
-        if (spinner) { spinner.style.display = 'flex'; console.log('spinner shown'); }
-        else { console.log('spinner NOT found for', productId); }
+        if (spinner) spinner.style.display = 'flex';
         statusEl.textContent = '⏳ Uploading...';
         
         const formData = new FormData();
         formData.append('design', file);
         formData.append('productId', productId);
-        
-        console.log('FormData created, sending fetch...');
         
         try {
             const res = await fetch('/admin/upload', { method: 'POST', body: formData, credentials: 'same-origin' });
@@ -139,17 +135,14 @@
             
             if (data.success) {
                 statusEl.textContent = '✅ Live!';
-                // Force refresh the image
-                const img = event.target?.closest?.('[ondrop]')?.querySelector('img') 
-                    || document.querySelector(`[ondrop*="${productId}"] img`);
+                // Use the direct blob URL if returned (persistent), otherwise use the local path
+                const newSrc = data.url || ('/images/products/' + productId + '.png?t=' + Date.now());
+                const img = document.querySelector('[data-product-id="' + productId + '"] img');
                 if (img) {
-                    img.src = '/images/products/' + productId + '.png?t=' + Date.now();
+                    img.src = newSrc;
                     img.style.display = '';
                     const fallback = img.nextElementSibling;
                     if (fallback) fallback.style.display = 'none';
-                } else {
-                    // Refresh the page to show updates
-                    location.reload();
                 }
                 showMessage('✅ Design uploaded for <strong>' + productId + '</strong> — now live on product pages!', 'success');
             } else {
@@ -159,7 +152,7 @@
         } catch (err) {
             console.error('Upload error:', err.name, err.message, err.stack);
             statusEl.textContent = '❌ Error';
-            showMessage('❌ Error: ' + err.name + ' — ' + err.message, 'error');
+            showMessage('❌ Network error: ' + err.message, 'error');
         }
         
         if (spinner) spinner.style.display = 'none';
