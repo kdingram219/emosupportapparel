@@ -9,6 +9,11 @@ const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const { products, customCategories } = require('./products');
 
+// Vercel Blob — persistent image storage (works on serverless)
+const { put, list } = require('@vercel/blob');
+const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+const USE_BLOB = !!BLOB_TOKEN;
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -22,34 +27,57 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Multer config: save uploaded designs to /tmp/ (works on Vercel serverless)
-// On Vercel, the project directory is read-only, so we use /tmp/ and serve
-// from there via the custom image route. Files persist for the function instance lifetime.
+// Multer config:
+// - When Vercel Blob is configured: use memoryStorage (buffer goes straight to Blob)
+// - Otherwise: disk storage to /tmp/ (local dev or legacy fallback)
 const UPLOAD_DIR = process.env.VERCEL ? '/tmp/esa-uploads' : path.join(__dirname, 'public/images/products');
-try { if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch(e) {}
+if (!USE_BLOB) {
+    try { if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch(e) {}
+}
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, UPLOAD_DIR);
-    },
-    filename: (req, file, cb) => {
-        // Use a temp name — we'll rename after we know the productId
-        const ext = path.extname(file.originalname) || '.png';
-        cb(null, 'upload-temp-' + Date.now() + ext);
+const fileFilter = (req, file, cb) => {
+    const allowed = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
+    if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only PNG, JPG, GIF, and WebP images are allowed'));
     }
-});
-const upload = multer({ 
-    storage,
-    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB max
-    fileFilter: (req, file, cb) => {
-        const allowed = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
-        if (allowed.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only PNG, JPG, GIF, and WebP images are allowed'));
+};
+
+const upload = USE_BLOB
+    ? multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 }, fileFilter })
+    : multer({
+        storage: multer.diskStorage({
+            destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+            filename: (req, file, cb) => {
+                const ext = path.extname(file.originalname) || '.png';
+                cb(null, 'upload-temp-' + Date.now() + ext);
+            }
+        }),
+        limits: { fileSize: 20 * 1024 * 1024 },
+        fileFilter
+    });
+
+// In-memory Blob URL cache: productId -> public blob URL
+// Populated at startup from list() and updated on each upload.
+const blobUrlCache = {};
+
+// Pre-populate cache from existing blobs at startup
+if (USE_BLOB) {
+    (async () => {
+        try {
+            const { blobs } = await list({ prefix: 'products/', token: BLOB_TOKEN });
+            for (const blob of blobs) {
+                // pathname: products/<productId>.ext
+                const base = path.basename(blob.pathname, path.extname(blob.pathname));
+                blobUrlCache[base] = blob.url;
+            }
+            console.log('[ESA] Blob cache loaded:', Object.keys(blobUrlCache).length, 'products');
+        } catch (e) {
+            console.error('[ESA] Could not pre-load blob cache:', e.message);
         }
-    }
-});
+    })();
+}
 
 // Custom renderer middleware to handle nested EJS layout seamlessly
 app.use((req, res, next) => {
@@ -101,9 +129,14 @@ app.get('/images/products/:filename', (req, res) => {
     const parsed = path.parse(filename);
     const productId = parsed.name;
     const reqExt = parsed.ext.toLowerCase();
+
+    // 0. Vercel Blob — persistent storage (primary on serverless)
+    if (USE_BLOB && blobUrlCache[productId]) {
+        return res.redirect(302, blobUrlCache[productId]);
+    }
     
-    // 0. Check upload dir first (/tmp/ on Vercel, products dir locally)
-    if (UPLOAD_DIR && fs.existsSync(UPLOAD_DIR)) {
+    // 1. Check upload dir (/tmp/ on Vercel, products dir locally)
+    if (!USE_BLOB && UPLOAD_DIR && fs.existsSync(UPLOAD_DIR)) {
         if (reqExt) {
             const exactPath = path.join(UPLOAD_DIR, filename);
             if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
@@ -118,7 +151,7 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 1. Check products dir for exact match
+    // 2. Check products dir for exact match
     if (reqExt) {
         const exactPath = path.join(productsDir, filename);
         if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
@@ -126,7 +159,7 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 2. Try productId with common extensions in products dir
+    // 3. Try productId with common extensions in products dir
     for (const ext of ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG']) {
         const filePath = path.join(productsDir, productId + ext);
         if (fs.existsSync(filePath) && fs.statSync(filePath).size > 100) {
@@ -134,7 +167,7 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 3. Check the mapping file
+    // 4. Check the mapping file
     if (productImageMap[productId]) {
         const mappedFile = path.join(productsDir, productImageMap[productId]);
         if (fs.existsSync(mappedFile)) {
@@ -142,7 +175,7 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 4. Search all files for one containing the productId
+    // 5. Search all files for one containing the productId
     for (const dir of [productsDir, UPLOAD_DIR].filter(d => d && fs.existsSync(d))) {
         try {
             const files = fs.readdirSync(dir);
@@ -158,7 +191,7 @@ app.get('/images/products/:filename', (req, res) => {
         } catch(e) {}
     }
     
-    // 5. Nothing found — return 404 (client JS will show text-based design)
+    // 6. Nothing found — return 404 (client JS will show text-based design)
     res.status(404).end();
 });
 
@@ -608,28 +641,52 @@ app.post('/admin/upload', (req, res, next) => {
         return res.status(401).json({ error: 'Not authenticated' });
     }
     next();
-}, upload.single('design'), (req, res) => {
+}, upload.single('design'), async (req, res) => {
     const file = req.file;
     const productId = req.body.productId || '';
     
     if (!file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
-    
-    // Save to upload dir (/tmp/ on Vercel, products dir locally)
-    const targetName = productId + '.png';
-    const targetPath = path.join(UPLOAD_DIR, targetName);
+
+    const ext = path.extname(file.originalname || '').toLowerCase() || '.png';
+    const targetName = `products/${productId}${ext}`;
+
+    // --- VERCEL BLOB PATH (persistent, serverless-safe) ---
+    if (USE_BLOB) {
+        try {
+            const blob = await put(targetName, file.buffer, {
+                access: 'public',
+                token: BLOB_TOKEN,
+                contentType: file.mimetype,
+                addRandomSuffix: false, // deterministic URL per productId
+            });
+            // Update in-memory cache so image serving works immediately
+            blobUrlCache[productId] = blob.url;
+            console.log('[ESA] Blob upload success:', productId, '->', blob.url);
+            return res.json({
+                success: true,
+                filename: targetName,
+                productId,
+                path: '/images/products/' + productId + ext,
+                url: blob.url,
+                message: `Design uploaded for "${productId}"`,
+            });
+        } catch (err) {
+            console.error('[ESA] Blob upload error:', err);
+            return res.status(500).json({ error: 'Blob upload failed: ' + err.message });
+        }
+    }
+
+    // --- LOCAL / LEGACY DISK PATH ---
+    const diskTargetName = productId + '.png';
+    const targetPath = path.join(UPLOAD_DIR, diskTargetName);
     
     try {
-        // Remove old file if it exists
-        if (fs.existsSync(targetPath)) {
-            fs.unlinkSync(targetPath);
-        }
-        // Rename temp file to target
+        if (fs.existsSync(targetPath)) fs.unlinkSync(targetPath);
         fs.renameSync(file.path, targetPath);
     } catch (err) {
         console.error('File rename error:', err);
-        // Try copy instead of rename (cross-device on Vercel)
         try {
             fs.copyFileSync(file.path, targetPath);
             try { fs.unlinkSync(file.path); } catch(e) {}
@@ -640,15 +697,15 @@ app.post('/admin/upload', (req, res, next) => {
     
     // Also try to mirror to public dir (works locally, fails silently on Vercel)
     try {
-        const mirrorPath = path.join(__dirname, 'public/images/products', targetName);
+        const mirrorPath = path.join(__dirname, 'public/images/products', diskTargetName);
         fs.copyFileSync(targetPath, mirrorPath);
     } catch(e) { /* Vercel: read-only dir, ignore */ }
     
     res.json({ 
         success: true, 
-        filename: targetName,
-        productId: productId,
-        path: '/images/products/' + targetName,
+        filename: diskTargetName,
+        productId,
+        path: '/images/products/' + diskTargetName,
         message: productId ? `Design uploaded for "${productId}"` : 'Design uploaded!'
     });
 });
