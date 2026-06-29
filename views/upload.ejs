@@ -139,9 +139,9 @@
             
             if (data.success) {
                 statusEl.textContent = '✅ Live!';
-                // Force refresh the image
-                const img = event.target?.closest?.('[ondrop]')?.querySelector('img') 
-                    || document.querySelector(`[ondrop*="${productId}"] img`);
+                // Find the product card image by productId and refresh it
+                const card = document.querySelector(`[ondrop*="${productId}"]`);
+                const img = card ? card.querySelector('img') : null;
                 if (img) {
                     img.src = '/images/products/' + productId + '.png?t=' + Date.now();
                     img.style.display = '';
