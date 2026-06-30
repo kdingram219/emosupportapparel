@@ -187,18 +187,18 @@ app.get('/images/products/:filename', (req, res) => {
         }
     }
     
-    // 1. Check products dir for exact match
+    // 1. Check products dir for exact match (skip tiny placeholder files under 1KB)
     if (reqExt) {
         const exactPath = path.join(productsDir, filename);
-        if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 100) {
+        if (fs.existsSync(exactPath) && fs.statSync(exactPath).size > 1000) {
             return res.sendFile(exactPath);
         }
     }
     
-    // 2. Try productId with common extensions in products dir
+    // 2. Try productId with common extensions in products dir (skip tiny placeholders)
     for (const ext of ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG']) {
         const filePath = path.join(productsDir, productId + ext);
-        if (fs.existsSync(filePath) && fs.statSync(filePath).size > 100) {
+        if (fs.existsSync(filePath) && fs.statSync(filePath).size > 1000) {
             return res.sendFile(filePath);
         }
     }

@@ -52,10 +52,10 @@
                             <!-- Current design preview -->
                             <div class="aspect-square bg-charcoal/5 flex items-center justify-center p-4 border-b border-charcoal/5 relative">
                                 <img src="/images/products/<%= product.id %>.png" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+                                     onerror="this.dataset.error='1'; this.style.display='none'; this.closest('.aspect-square').querySelector('.design-fallback').style.display='flex'"
                                      alt="<%= product.name %>" 
                                      class="w-full h-full object-contain" />
-                                <div style="display:none" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                                <div class="design-fallback absolute inset-0 flex flex-col items-center justify-center text-center p-4" style="display:none">
                                     <span class="font-serif text-xs font-bold text-charcoal/40 uppercase whitespace-pre-line"><%= product.designText || product.name %></span>
                                 </div>
                                 
@@ -149,7 +149,10 @@
                 if (img) {
                     img.src = '/images/products/' + productId + '.png?t=' + Date.now();
                     img.style.display = '';
-                    const fallback = img.nextElementSibling;
+                    // Remove error flag so onerror can fire fresh
+                    delete img.dataset.error;
+                    // Hide the fallback by class name
+                    const fallback = card.querySelector('.design-fallback');
                     if (fallback) fallback.style.display = 'none';
                 } else {
                     // Refresh the page to show updates
