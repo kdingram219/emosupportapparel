@@ -138,7 +138,11 @@
             const data = await res.json();
             
             if (data.success) {
-                statusEl.textContent = '✅ Live!';
+                // Show commit status
+                const commitMsg = data.committed 
+                    ? '✅ Permanently saved!' 
+                    : (data.commitInfo || '✅ Uploaded (temp)');
+                statusEl.textContent = commitMsg;
                 // Find the product card image by productId and refresh it
                 const card = document.querySelector(`[ondrop*="${productId}"]`);
                 const img = card ? card.querySelector('img') : null;
@@ -151,7 +155,7 @@
                     // Refresh the page to show updates
                     location.reload();
                 }
-                showMessage('✅ Design uploaded for <strong>' + productId + '</strong> — now live on product pages!', 'success');
+                showMessage('✅ Design uploaded for <strong>' + productId + '</strong> — ' + (data.committed ? 'saved permanently to GitHub!' : 'saved temporarily.'), 'success');
             } else {
                 statusEl.textContent = '❌ Failed';
                 showMessage('❌ ' + (data.error || 'Upload failed'), 'error');

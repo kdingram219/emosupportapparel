@@ -8,6 +8,7 @@ const multer = require('multer');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const { products, customCategories } = require('./products');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -75,6 +76,74 @@ app.use((req, res, next) => {
     };
     next();
 });
+
+// --- GITHUB INTEGRATION FOR PERMANENT UPLOADS ---
+// Commits uploaded files to the repo so they persist on Vercel
+
+const GITHUB_REPO = 'kdingram219/emosupportapparel';
+
+function getGitHubToken() {
+    // Check env var first (Vercel), then config file (local dev)
+    if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
+    try {
+        const configPath = path.join(__dirname, 'data/github-config.json');
+        if (fs.existsSync(configPath)) {
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            return config.token;
+        }
+    } catch(e) {}
+    return null;
+}
+
+function commitFileToGitHub(productId, fileBuffer) {
+    return new Promise((resolve, reject) => {
+        const token = getGitHubToken();
+        if (!token) {
+            resolve({ committed: false, reason: 'No GitHub token configured' });
+            return;
+        }
+        
+        const filePath = `public/images/products/${productId}.png`;
+        const content = fileBuffer.toString('base64');
+        const data = JSON.stringify({
+            message: `Upload design: ${productId} [via ESA admin]`,
+            content: content,
+            branch: 'main'
+        });
+        
+        const options = {
+            hostname: 'api.github.com',
+            path: `/repos/${GITHUB_REPO}/contents/${filePath}`,
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json',
+                'User-Agent': 'ESA-Storefront/1.0'
+            }
+        };
+        
+        const req = https.request(options, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => {
+                try {
+                    const result = JSON.parse(body);
+                    if (res.statusCode === 200 || res.statusCode === 201) {
+                        resolve({ committed: true, sha: result.content?.sha, url: result.content?.download_url });
+                    } else {
+                        resolve({ committed: false, reason: result.message || `HTTP ${res.statusCode}` });
+                    }
+                } catch(e) {
+                    resolve({ committed: false, reason: body.substring(0,100) });
+                }
+            });
+        });
+        
+        req.on('error', (e) => resolve({ committed: false, reason: e.message }));
+        req.write(data);
+        req.end();
+    });
+}
 
 // --- ROUTES ---
 
@@ -662,7 +731,7 @@ app.post('/admin/upload', (req, res, next) => {
         return res.status(401).json({ error: 'Not authenticated' });
     }
     next();
-}, upload.single('design'), (req, res) => {
+}, upload.single('design'), async (req, res) => {
     const file = req.file;
     const productId = req.body.productId || '';
     
@@ -698,11 +767,17 @@ app.post('/admin/upload', (req, res, next) => {
         fs.copyFileSync(targetPath, mirrorPath);
     } catch(e) { /* Vercel: read-only dir, ignore */ }
     
+    // Commit to GitHub for permanent storage
+    const fileBuffer = fs.readFileSync(targetPath);
+    const commitResult = await commitFileToGitHub(productId, fileBuffer);
+    
     res.json({ 
         success: true, 
         filename: targetName,
         productId: productId,
         path: '/images/products/' + targetName,
+        committed: commitResult.committed,
+        commitInfo: commitResult.committed ? '✅ Saved permanently to GitHub' : (commitResult.reason || '⚠️ Saved to /tmp/ only (refresh Vercel to see instructions)'),
         message: productId ? `Design uploaded for "${productId}"` : 'Design uploaded!'
     });
 });
