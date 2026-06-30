@@ -162,16 +162,69 @@ app.get('/images/products/:filename', (req, res) => {
     res.status(404).end();
 });
 
-// Load the design catalog
-const designCatalog = (() => {
+// Dynamic design catalog — auto-discovers images from filesystem + uploads
+// Returns merged catalog: seed data from designs.json, plus any files found in
+// the products directory and /tmp/ uploads (Vercel)
+function getDesignCatalog() {
+    const catalog = [];
+    const seenFilenames = new Set();
+    
+    // 1. Load seed data from designs.json
     try {
         const catalogPath = path.join(__dirname, 'data/designs.json');
         if (fs.existsSync(catalogPath)) {
-            return JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+            const seed = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+            seed.forEach(d => { catalog.push(d); seenFilenames.add(d.filename.toLowerCase()); });
         }
     } catch(e) { console.error("Error loading design catalog:", e.message); }
-    return [];
-})();
+    
+    // 2. Scan products dir for any new image files not in the seed
+    try {
+        const productsDir = path.join(__dirname, 'public/images/products');
+        if (fs.existsSync(productsDir)) {
+            const files = fs.readdirSync(productsDir).filter(f => {
+                const ext = path.extname(f).toLowerCase();
+                return ['.png','.jpg','.jpeg'].includes(ext) && !seenFilenames.has(f.toLowerCase())
+                    && !f.startsWith('hero-') && !f.startsWith('product-') && !f.startsWith('placeholders');
+            });
+            files.forEach((f, i) => {
+                const base = path.basename(f, path.extname(f)).toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+                catalog.push({
+                    id: 'design-' + base || 'design-auto-' + i,
+                    name: 'Design #' + (catalog.length + 1),
+                    filename: f,
+                    filetype: path.extname(f).toUpperCase().replace('.',''),
+                    autoDiscovered: true
+                });
+            });
+        }
+    } catch(e) {}
+    
+    // 3. Scan /tmp/ uploads for additional designs (Vercel)
+    try {
+        if (UPLOAD_DIR && fs.existsSync(UPLOAD_DIR)) {
+            const tmpFiles = fs.readdirSync(UPLOAD_DIR).filter(f => {
+                const ext = path.extname(f).toLowerCase();
+                return ['.png','.jpg','.jpeg'].includes(ext) && !f.startsWith('upload-temp');
+            });
+            tmpFiles.forEach(f => {
+                if (!seenFilenames.has(f.toLowerCase())) {
+                    const base = path.basename(f, path.extname(f));
+                    catalog.push({
+                        id: 'design-' + base.toLowerCase(),
+                        name: 'Custom: ' + base,
+                        filename: f,
+                        filetype: path.extname(f).toUpperCase().replace('.',''),
+                        fromUpload: true
+                    });
+                    seenFilenames.add(f.toLowerCase());
+                }
+            });
+        }
+    } catch(e) {}
+    
+    return catalog;
+}
 
 // Product types available for custom designs (the blank products)
 const APPLY_PRODUCT_TYPES = [
@@ -198,13 +251,14 @@ app.get('/', (req, res) => {
 app.get('/designs', (req, res) => {
     res.renderView('designs', {
         title: "Shop Designs — Pick Your Artwork",
-        designs: designCatalog
+        designs: getDesignCatalog()
     });
 });
 
 // Design Configurator — Pick a design, then choose product/color/size
 app.get('/designs/:designId', (req, res) => {
-    const design = designCatalog.find(d => d.id === req.params.designId);
+    const allDesigns = getDesignCatalog();
+    const design = allDesigns.find(d => d.id === req.params.designId);
     if (!design) {
         return res.status(404).send("Design not found.");
     }
@@ -223,7 +277,7 @@ app.get('/designs/:designId', (req, res) => {
 // Design to Cart — Add a customized design product to cart
 app.post('/cart/add-design', (req, res) => {
     const { designId, productTypeId, color, size } = req.body;
-    const design = designCatalog.find(d => d.id === designId);
+    const design = getDesignCatalog().find(d => d.id === designId);
     const productType = APPLY_PRODUCT_TYPES.find(t => t.id === productTypeId);
     
     if (!design || !productType) {
