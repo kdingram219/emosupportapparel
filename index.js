@@ -768,8 +768,14 @@ app.post('/admin/upload', (req, res, next) => {
     } catch(e) { /* Vercel: read-only dir, ignore */ }
     
     // Commit to GitHub for permanent storage
-    const fileBuffer = fs.readFileSync(targetPath);
-    const commitResult = await commitFileToGitHub(productId, fileBuffer);
+    let commitResult = { committed: false, reason: 'Commit skipped' };
+    try {
+        const fileBuffer = fs.readFileSync(targetPath);
+        commitResult = await commitFileToGitHub(productId, fileBuffer);
+    } catch(e) {
+        console.error('GitHub commit error:', e.message);
+        commitResult = { committed: false, reason: e.message };
+    }
     
     res.json({ 
         success: true, 
@@ -791,6 +797,16 @@ app.get('/admin/logout', (req, res) => {
 // 404 Fallback
 app.use((req, res) => {
     res.status(404).send("This page is experiencing a minor inconvenience. 404 - Not Found.");
+});
+
+// Global error handler — prevents default Express 500 HTML page
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err);
+    if (req.accepts('json')) {
+        res.status(500).json({ error: 'Internal server error', message: err.message });
+    } else {
+        res.status(500).send("Something went wrong. We're working on it.");
+    }
 });
 
 // Bind to port 3000 on ALL interfaces (0.0.0.0) if run directly
